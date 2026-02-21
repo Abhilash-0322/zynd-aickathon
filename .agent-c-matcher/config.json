@@ -1,0 +1,54 @@
+{
+  "id": "abd6b214-7c0a-4910-adf9-e433547824b5",
+  "didIdentifier": "did:polygonid:polygon:amoy:2qbBNbJJtGpDFHERDZHoRx9EKPDc5X38VmXwCDT5nV",
+  "did": {
+    "id": "urn:8fe35b46-c888-46cd-b0e2-85bbd91db7b3",
+    "@context": [
+      "https://www.w3.org/2018/credentials/v1",
+      "https://schema.iden3.io/core/jsonld/iden3proofs.jsonld",
+      "https://schema.iden3.io/core/jsonld/auth.jsonld"
+    ],
+    "type": [
+      "VerifiableCredential",
+      "AuthBJJCredential"
+    ],
+    "credentialSubject": {
+      "x": "7858344615662726169844623253742424436784317905643631226760007728531497736557",
+      "y": "18210925837559927204472099621462977549134923979096059282854189693297386093486",
+      "type": "AuthBJJCredential"
+    },
+    "issuer": "did:polygonid:polygon:amoy:2qbBNbJJtGpDFHERDZHoRx9EKPDc5X38VmXwCDT5nV",
+    "credentialSchema": {
+      "id": "https://schema.iden3.io/core/json/auth.json",
+      "type": "JsonSchema2023"
+    },
+    "credentialStatus": {
+      "id": "https://rhs-staging.polygonid.me/node?state=446bcbfbbbf44c978ef8f37486c639e778359434d69fb5205a62a1e00884221f",
+      "type": "Iden3ReverseSparseMerkleTreeProof",
+      "revocationNonce": 0
+    },
+    "issuanceDate": "2026-02-21T19:32:13.466Z",
+    "proof": [
+      {
+        "issuerData": {
+          "id": "did:polygonid:polygon:amoy:2qbBNbJJtGpDFHERDZHoRx9EKPDc5X38VmXwCDT5nV",
+          "state": {
+            "rootOfRoots": "0000000000000000000000000000000000000000000000000000000000000000",
+            "revocationTreeRoot": "0000000000000000000000000000000000000000000000000000000000000000",
+            "claimsTreeRoot": "f44f49f0e2a3685da697cc953bd776f9d9a0067e6116a080b07f5853af060618",
+            "value": "446bcbfbbbf44c978ef8f37486c639e778359434d69fb5205a62a1e00884221f"
+          }
+        },
+        "type": "Iden3SparseMerkleTreeProof",
+        "coreClaim": "cca3371a6cb1b715004407e325bd993c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006dd9ae3f4719beac0b246ee5decb2407842e7c90f67d4957ac5a8dd359aa5f11ae7bd005b0e0eb07f1b29ad608b407339a9838ecc7d9431e84cb8e43cd0443280000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "mtp": {
+          "existence": true,
+          "siblings": []
+        }
+      }
+    ]
+  },
+  "name": "Candidate Matcher",
+  "description": "Objectively matches anonymized candidate skill profiles to job requirements using transparent scoring.",
+  "seed": "m0y+0V2jSI9nwz0ge3tbEPk69uxjMG3AfU6cWoKtdj8="
+}

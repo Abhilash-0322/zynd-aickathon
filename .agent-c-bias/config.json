@@ -1,0 +1,54 @@
+{
+  "id": "f3a2d15b-6402-41e8-bc12-a2e3b0e2f067",
+  "didIdentifier": "did:polygonid:polygon:amoy:2qaUzCGWbEq9EcC7y9zBHZn55ptx2WC2vv3QKviNFz",
+  "did": {
+    "id": "urn:590b98dc-4841-4388-be2c-e80e2b9e1a11",
+    "@context": [
+      "https://www.w3.org/2018/credentials/v1",
+      "https://schema.iden3.io/core/jsonld/iden3proofs.jsonld",
+      "https://schema.iden3.io/core/jsonld/auth.jsonld"
+    ],
+    "type": [
+      "VerifiableCredential",
+      "AuthBJJCredential"
+    ],
+    "credentialSubject": {
+      "x": "6615044356538591833458201817336632501895339594924780861223798545000267942485",
+      "y": "813115077489818386541868029695004736013191740669493573780820332312448191863",
+      "type": "AuthBJJCredential"
+    },
+    "issuer": "did:polygonid:polygon:amoy:2qaUzCGWbEq9EcC7y9zBHZn55ptx2WC2vv3QKviNFz",
+    "credentialSchema": {
+      "id": "https://schema.iden3.io/core/json/auth.json",
+      "type": "JsonSchema2023"
+    },
+    "credentialStatus": {
+      "id": "https://rhs-staging.polygonid.me/node?state=6a015eac13e4f5fcac54a9e99eebf3d5da67d69146aa76468f49da27a89be903",
+      "type": "Iden3ReverseSparseMerkleTreeProof",
+      "revocationNonce": 0
+    },
+    "issuanceDate": "2026-02-21T19:32:08.709Z",
+    "proof": [
+      {
+        "issuerData": {
+          "id": "did:polygonid:polygon:amoy:2qaUzCGWbEq9EcC7y9zBHZn55ptx2WC2vv3QKviNFz",
+          "state": {
+            "rootOfRoots": "0000000000000000000000000000000000000000000000000000000000000000",
+            "revocationTreeRoot": "0000000000000000000000000000000000000000000000000000000000000000",
+            "claimsTreeRoot": "815855c1c215f6dc1284696b4db7a06fc83a3110737404fe6450ada79823411b",
+            "value": "6a015eac13e4f5fcac54a9e99eebf3d5da67d69146aa76468f49da27a89be903"
+          }
+        },
+        "type": "Iden3SparseMerkleTreeProof",
+        "coreClaim": "cca3371a6cb1b715004407e325bd993c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000558a5e6281b24d93c7f2093daafa50c37c71ebe0d6b737b03ddeb72480fb9f0e77cd0ff75925b00a8170098bf002bb5dcd856c00fe0df3fe973e6777f234cc010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "mtp": {
+          "existence": true,
+          "siblings": []
+        }
+      }
+    ]
+  },
+  "name": "Bias Detector",
+  "description": "Detects and flags algorithmic, linguistic and structural biases in job descriptions and hiring criteria.",
+  "seed": "o7KLtIOgl4hCN0WjnP4lx2s3CxjAG3LartcDapFhnnI="
+}

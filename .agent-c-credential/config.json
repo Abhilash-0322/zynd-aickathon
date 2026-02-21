@@ -1,0 +1,54 @@
+{
+  "id": "dba593ff-142b-40a5-8ca6-1f73050009d1",
+  "didIdentifier": "did:polygonid:polygon:amoy:2qVmVG8k8QSX3i4cPft9ZvPYmAC3Xi5rSjobYq7zKe",
+  "did": {
+    "id": "urn:df820575-3f9b-4675-a10a-9bf9c624c43b",
+    "@context": [
+      "https://www.w3.org/2018/credentials/v1",
+      "https://schema.iden3.io/core/jsonld/iden3proofs.jsonld",
+      "https://schema.iden3.io/core/jsonld/auth.jsonld"
+    ],
+    "type": [
+      "VerifiableCredential",
+      "AuthBJJCredential"
+    ],
+    "credentialSubject": {
+      "x": "18209025596114547551407435160374833686239174308177207698508451072005705292540",
+      "y": "2198750665473780127021146245723404339564414637522086632208202635969429011390",
+      "type": "AuthBJJCredential"
+    },
+    "issuer": "did:polygonid:polygon:amoy:2qVmVG8k8QSX3i4cPft9ZvPYmAC3Xi5rSjobYq7zKe",
+    "credentialSchema": {
+      "id": "https://schema.iden3.io/core/json/auth.json",
+      "type": "JsonSchema2023"
+    },
+    "credentialStatus": {
+      "id": "https://rhs-staging.polygonid.me/node?state=c2e116abca7d16a6078953ebcf4632cad658700e793d70cda5debc1ae1bc4815",
+      "type": "Iden3ReverseSparseMerkleTreeProof",
+      "revocationNonce": 0
+    },
+    "issuanceDate": "2026-02-21T19:32:15.830Z",
+    "proof": [
+      {
+        "issuerData": {
+          "id": "did:polygonid:polygon:amoy:2qVmVG8k8QSX3i4cPft9ZvPYmAC3Xi5rSjobYq7zKe",
+          "state": {
+            "rootOfRoots": "0000000000000000000000000000000000000000000000000000000000000000",
+            "revocationTreeRoot": "0000000000000000000000000000000000000000000000000000000000000000",
+            "claimsTreeRoot": "738072cdf9857bfa9a61e09dace325d5921dca156686dfe83bfb9a54902c1f23",
+            "value": "c2e116abca7d16a6078953ebcf4632cad658700e793d70cda5debc1ae1bc4815"
+          }
+        },
+        "type": "Iden3SparseMerkleTreeProof",
+        "coreClaim": "cca3371a6cb1b715004407e325bd993c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000fcdadf2d6d4ddfb83b0a2f8142787de0c6c85f1275031ea0430d2e6479f14128be7bc8329f93c3fc341df8ea2abaa0e2ff91ea9ad0e664859b6c0aece272dc040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "mtp": {
+          "existence": true,
+          "siblings": []
+        }
+      }
+    ]
+  },
+  "name": "Credential Issuer",
+  "description": "Issues W3C-standard Verifiable Credentials for verified candidate skills and creates transparent hiring audit trails.",
+  "seed": "j4mcxbe7pMSqGDHTAZwZ1j2IFWx1MSBO28vZIxZfAYM="
+}

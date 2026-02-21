@@ -1,0 +1,54 @@
+{
+  "id": "e1937daf-dee5-4f35-8820-d47cbbd3b914",
+  "didIdentifier": "did:polygonid:polygon:amoy:2qSrva3edeG8JFZtTfvCep8cktHZve8CYCLAoxa1TG",
+  "did": {
+    "id": "urn:d6ac7bd7-2ebc-49c1-b7d9-28db620eb277",
+    "@context": [
+      "https://www.w3.org/2018/credentials/v1",
+      "https://schema.iden3.io/core/jsonld/iden3proofs.jsonld",
+      "https://schema.iden3.io/core/jsonld/auth.jsonld"
+    ],
+    "type": [
+      "VerifiableCredential",
+      "AuthBJJCredential"
+    ],
+    "credentialSubject": {
+      "x": "16597708131939494799425441212074510765862206489504849737483879698231360948072",
+      "y": "3392586384563116733646965007962404288376557249167107134817861452039733668153",
+      "type": "AuthBJJCredential"
+    },
+    "issuer": "did:polygonid:polygon:amoy:2qSrva3edeG8JFZtTfvCep8cktHZve8CYCLAoxa1TG",
+    "credentialSchema": {
+      "id": "https://schema.iden3.io/core/json/auth.json",
+      "type": "JsonSchema2023"
+    },
+    "credentialStatus": {
+      "id": "https://rhs-staging.polygonid.me/node?state=d9e3340dd33d11cb520f9d37c2a0ba0c575ded32950b197cc442ae6e0bd99929",
+      "type": "Iden3ReverseSparseMerkleTreeProof",
+      "revocationNonce": 0
+    },
+    "issuanceDate": "2026-02-21T19:32:18.408Z",
+    "proof": [
+      {
+        "issuerData": {
+          "id": "did:polygonid:polygon:amoy:2qSrva3edeG8JFZtTfvCep8cktHZve8CYCLAoxa1TG",
+          "state": {
+            "rootOfRoots": "0000000000000000000000000000000000000000000000000000000000000000",
+            "revocationTreeRoot": "0000000000000000000000000000000000000000000000000000000000000000",
+            "claimsTreeRoot": "bc960e9765b81b62bd88273693555599623fb33e40af160efeec58e7478ce62f",
+            "value": "d9e3340dd33d11cb520f9d37c2a0ba0c575ded32950b197cc442ae6e0bd99929"
+          }
+        },
+        "type": "Iden3SparseMerkleTreeProof",
+        "coreClaim": "cca3371a6cb1b715004407e325bd993c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000068071b1b58a756e09e9853e0728bf53336548176c4555731a6062ee74af8b124396940842453693509f4614aef389b7a058d457dc0dcbde5001df6d7c62280070000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "mtp": {
+          "existence": true,
+          "siblings": []
+        }
+      }
+    ]
+  },
+  "name": "Orchestrator",
+  "description": "Central orchestrator for the Fair Hiring Network. Coordinates the full multi-agent, bias-free candidate evaluation pipeline using Zynd Protocol.",
+  "seed": "KMEyWEQUsJWmoK+IbrKjhIiDYPjZQ8AHjwoTNHnP6uo="
+}

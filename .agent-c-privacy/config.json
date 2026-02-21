@@ -1,0 +1,54 @@
+{
+  "id": "0f319a30-900b-42fa-a9fa-87279f0e9165",
+  "didIdentifier": "did:polygonid:polygon:amoy:2qV4s19Dg7MLvdbGbbVfeTW2mTcWMx5XGarrFao8rw",
+  "did": {
+    "id": "urn:33ad8fa7-aa78-4305-a04d-00eea467dd6d",
+    "@context": [
+      "https://www.w3.org/2018/credentials/v1",
+      "https://schema.iden3.io/core/jsonld/iden3proofs.jsonld",
+      "https://schema.iden3.io/core/jsonld/auth.jsonld"
+    ],
+    "type": [
+      "VerifiableCredential",
+      "AuthBJJCredential"
+    ],
+    "credentialSubject": {
+      "x": "12803769725310245964590104323966109347044995547223283588729709258484065429812",
+      "y": "3973432540453373653313003850951135501921812958497020959767770988730970094901",
+      "type": "AuthBJJCredential"
+    },
+    "issuer": "did:polygonid:polygon:amoy:2qV4s19Dg7MLvdbGbbVfeTW2mTcWMx5XGarrFao8rw",
+    "credentialSchema": {
+      "id": "https://schema.iden3.io/core/json/auth.json",
+      "type": "JsonSchema2023"
+    },
+    "credentialStatus": {
+      "id": "https://rhs-staging.polygonid.me/node?state=f7538a91986da8ceb2a18d804cb65cf927b2265161e2279ba3a79d1804538919",
+      "type": "Iden3ReverseSparseMerkleTreeProof",
+      "revocationNonce": 0
+    },
+    "issuanceDate": "2026-02-21T19:32:05.531Z",
+    "proof": [
+      {
+        "issuerData": {
+          "id": "did:polygonid:polygon:amoy:2qV4s19Dg7MLvdbGbbVfeTW2mTcWMx5XGarrFao8rw",
+          "state": {
+            "rootOfRoots": "0000000000000000000000000000000000000000000000000000000000000000",
+            "revocationTreeRoot": "0000000000000000000000000000000000000000000000000000000000000000",
+            "claimsTreeRoot": "ee7d2418ddf70774d09c346f0bbf8f5d3b85b6c4f24ce24410414f233f59112c",
+            "value": "f7538a91986da8ceb2a18d804cb65cf927b2265161e2279ba3a79d1804538919"
+          }
+        },
+        "type": "Iden3SparseMerkleTreeProof",
+        "coreClaim": "cca3371a6cb1b715004407e325bd993c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000034e9ea324c102196f24ab49975b10ddff470fa5eb175c2a06eb1ca2b46ad4e1c353d4975dcaafbe7ed01fface9ee4e6d3362fa8e5de757bc52db142f14e2c8080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "mtp": {
+          "existence": true,
+          "siblings": []
+        }
+      }
+    ]
+  },
+  "name": "Privacy Guardian",
+  "description": "Anonymizes candidate profiles for blind screening by removing PII \u2014 name, gender, age, photo, email \u2014 while preserving skills and achievements.",
+  "seed": "4X85kh6CdPF1iyygDCTpZ+fyy1NPCbhZbB4XmZ6RTVA="
+}
