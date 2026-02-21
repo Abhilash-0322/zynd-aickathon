@@ -13,6 +13,7 @@ from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from api_server.database import (
+    AgentThinking,
     Application,
     ApplicationStatus,
     Job,
@@ -144,8 +145,8 @@ def get_job(db: Session, job_id: uuid.UUID) -> Optional[Job]:
 def create_application(
     db: Session,
     *,
-    candidate_id: uuid.UUID,
-    job_id: uuid.UUID,
+    candidate_id: Optional[uuid.UUID] = None,
+    job_id: Optional[uuid.UUID] = None,
     conversation_id: Optional[str] = None,
 ) -> Application:
     """Submit a new application, generating a conversation_id if not provided."""
@@ -283,6 +284,199 @@ def save_pipeline_event(
     db.commit()
     db.refresh(event)
     return event
+
+
+def save_agent_thinking(
+    db: Session,
+    *,
+    application_id: uuid.UUID,
+    agent_name: str,
+    thinking_text: str,
+    started_at: Optional[datetime] = None,
+    completed_at: Optional[datetime] = None,
+) -> AgentThinking:
+    """Persist the full concatenated thinking/reasoning text for an agent."""
+    thinking = AgentThinking(
+        application_id=application_id,
+        agent_name=agent_name,
+        thinking_text=thinking_text,
+        started_at=started_at or datetime.now(timezone.utc),
+        completed_at=completed_at,
+    )
+    db.add(thinking)
+    db.commit()
+    db.refresh(thinking)
+    return thinking
+
+
+def save_agent_thinkings_bulk(
+    db: Session,
+    *,
+    application_id: uuid.UUID,
+    thinkings: list[dict[str, Any]],
+) -> list[AgentThinking]:
+    """Save multiple agent thinking records at once."""
+    results = []
+    for t in thinkings:
+        thinking = AgentThinking(
+            application_id=application_id,
+            agent_name=t["agent_name"],
+            thinking_text=t.get("thinking_text", ""),
+            started_at=t.get("started_at", datetime.now(timezone.utc)),
+            completed_at=t.get("completed_at"),
+        )
+        db.add(thinking)
+        results.append(thinking)
+    db.commit()
+    for r in results:
+        db.refresh(r)
+    return results
+
+
+def save_pipeline_events_bulk(
+    db: Session,
+    *,
+    application_id: uuid.UUID,
+    events: list[dict[str, Any]],
+) -> int:
+    """Save multiple pipeline event records at once. Returns count."""
+    for ev in events:
+        event = PipelineEvent(
+            application_id=application_id,
+            agent_name=ev.get("agent_name", "System"),
+            event_type=ev.get("event_type", "unknown"),
+            step=ev.get("step"),
+            status=ev.get("status"),
+            data=ev.get("data"),
+        )
+        db.add(event)
+    db.commit()
+    return len(events)
+
+
+def get_application_history(
+    db: Session,
+    application_id: uuid.UUID,
+) -> Optional[dict[str, Any]]:
+    """Get full application details including events, thinkings, and results."""
+    stmt = select(Application).where(Application.id == application_id)
+    app = db.execute(stmt).scalar_one_or_none()
+    if not app:
+        return None
+
+    return _serialize_application_full(app)
+
+
+def get_application_history_by_conversation(
+    db: Session,
+    conversation_id: str,
+) -> Optional[dict[str, Any]]:
+    """Get full application details by conversation_id."""
+    stmt = select(Application).where(Application.conversation_id == conversation_id)
+    app = db.execute(stmt).scalar_one_or_none()
+    if not app:
+        return None
+
+    return _serialize_application_full(app)
+
+
+def get_user_history(
+    db: Session,
+    user_id: uuid.UUID,
+    *,
+    skip: int = 0,
+    limit: int = 50,
+) -> list[dict[str, Any]]:
+    """Get all pipeline runs for a user with summary info."""
+    stmt = (
+        select(Application)
+        .where(Application.candidate_id == user_id)
+        .order_by(Application.submitted_at.desc())
+        .offset(skip)
+        .limit(limit)
+    )
+    apps = list(db.execute(stmt).scalars().all())
+    return [_serialize_application_summary(app) for app in apps]
+
+
+def _serialize_application_summary(app: Application) -> dict[str, Any]:
+    """Serialize application to summary dict."""
+    summary: dict[str, Any] = {
+        "id": str(app.id),
+        "conversation_id": app.conversation_id,
+        "status": app.status.value if hasattr(app.status, "value") else str(app.status),
+        "submitted_at": app.submitted_at.isoformat() if app.submitted_at else None,
+        "completed_at": app.completed_at.isoformat() if app.completed_at else None,
+        "has_result": app.result is not None,
+        "has_thinkings": len(app.thinkings) > 0 if app.thinkings else False,
+        "event_count": len(app.events) if app.events else 0,
+    }
+    if app.result:
+        summary["scores"] = {
+            "overall": app.result.overall_score,
+            "privacy": app.result.privacy_score,
+            "bias_free": app.result.bias_free_score,
+            "skill": app.result.skill_score,
+            "match": app.result.match_score,
+        }
+        summary["recommendation"] = app.result.recommendation
+    if app.job:
+        summary["job_title"] = app.job.title
+        summary["company"] = app.job.company
+    return summary
+
+
+def _serialize_application_full(app: Application) -> dict[str, Any]:
+    """Serialize application with full detail including events, thinkings, results."""
+    data = _serialize_application_summary(app)
+
+    # Events
+    data["events"] = [
+        {
+            "id": ev.id,
+            "agent_name": ev.agent_name,
+            "event_type": ev.event_type,
+            "step": ev.step,
+            "status": ev.status,
+            "data": ev.data,
+            "timestamp": ev.timestamp.isoformat() if ev.timestamp else None,
+        }
+        for ev in (app.events or [])
+    ]
+
+    # Thinkings
+    data["thinkings"] = [
+        {
+            "id": t.id,
+            "agent_name": t.agent_name,
+            "thinking_text": t.thinking_text,
+            "started_at": t.started_at.isoformat() if t.started_at else None,
+            "completed_at": t.completed_at.isoformat() if t.completed_at else None,
+        }
+        for t in (app.thinkings or [])
+    ]
+
+    # Result
+    if app.result:
+        data["result"] = {
+            "id": str(app.result.id),
+            "privacy_score": app.result.privacy_score,
+            "bias_free_score": app.result.bias_free_score,
+            "skill_score": app.result.skill_score,
+            "match_score": app.result.match_score,
+            "overall_score": app.result.overall_score,
+            "recommendation": app.result.recommendation,
+            "executive_summary": app.result.executive_summary,
+            "key_strengths": app.result.key_strengths,
+            "skill_gaps": app.result.skill_gaps,
+            "next_steps": app.result.next_steps,
+            "fairness_guarantee": app.result.fairness_guarantee,
+            "credential_id": app.result.credential_id,
+            "raw_result": app.result.raw_result,
+            "created_at": app.result.created_at.isoformat() if app.result.created_at else None,
+        }
+
+    return data
 
 
 # ── Session CRUD ────────────────────────────────────────────────────────────────

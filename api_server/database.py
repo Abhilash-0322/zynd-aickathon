@@ -142,11 +142,11 @@ class Application(Base):
     conversation_id: Mapped[str] = mapped_column(
         String(100), unique=True, nullable=False, index=True
     )
-    candidate_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    candidate_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True
     )
-    job_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("jobs.id", ondelete="CASCADE"), nullable=False
+    job_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("jobs.id", ondelete="SET NULL"), nullable=True
     )
     status: Mapped[ApplicationStatus] = mapped_column(
         Enum(ApplicationStatus, name="application_status", create_constraint=True),
@@ -161,13 +161,16 @@ class Application(Base):
     )
 
     # Relationships
-    candidate: Mapped["User"] = relationship("User", back_populates="applications", lazy="selectin")
-    job: Mapped["Job"] = relationship("Job", back_populates="applications", lazy="selectin")
+    candidate: Mapped["User | None"] = relationship("User", back_populates="applications", lazy="selectin")
+    job: Mapped["Job | None"] = relationship("Job", back_populates="applications", lazy="selectin")
     result: Mapped["PipelineResult | None"] = relationship(
         "PipelineResult", back_populates="application", uselist=False, lazy="selectin"
     )
     events: Mapped[list["PipelineEvent"]] = relationship(
         "PipelineEvent", back_populates="application", lazy="selectin"
+    )
+    thinkings: Mapped[list["AgentThinking"]] = relationship(
+        "AgentThinking", back_populates="application", lazy="selectin"
     )
 
     def __repr__(self) -> str:
@@ -246,6 +249,36 @@ class PipelineEvent(Base):
 
     def __repr__(self) -> str:
         return f"<PipelineEvent {self.agent_name}:{self.event_type}>"
+
+
+class AgentThinking(Base):
+    """Stores the full concatenated thinking/reasoning text per agent per application."""
+    __tablename__ = "agent_thinkings"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    application_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("applications.id", ondelete="CASCADE"), nullable=False
+    )
+    agent_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    thinking_text: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    started_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=text("now()")
+    )
+    completed_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+
+    # Relationships
+    application: Mapped["Application"] = relationship(
+        "Application", back_populates="thinkings", lazy="selectin"
+    )
+
+    __table_args__ = (
+        UniqueConstraint("application_id", "agent_name", name="uq_agent_thinking_app_agent"),
+    )
+
+    def __repr__(self) -> str:
+        return f"<AgentThinking {self.agent_name} app={self.application_id}>"
 
 
 class Session(Base):

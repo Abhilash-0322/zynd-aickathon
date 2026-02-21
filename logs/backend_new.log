@@ -1,0 +1,334 @@
+nohup: ignoring input
+INFO:     Started server process [45555]
+INFO:     Waiting for application startup.
+Loaded agent config from /home/abhilash/codespace/Zynd-hack/.agent-c-privacy/config.json
+Disabling x402, X402 payment config not provided
+ * Serving Flask app 'agent_did:polygonid:polygon:amoy:2qV4s19Dg7MLvdbGbbVfeTW2mTcWMx5XGarrFao8rw'
+ * Debug mode: off
+2026-02-22 03:18:17,377 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:6005
+ * Running on http://192.168.0.231:6005
+2026-02-22 03:18:17,377 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:57930 - "WebSocket /ws" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:57942 - "GET /health HTTP/1.1" 200 OK
+Agent webhook server started
+Listening on http://localhost:6005/webhook
+Updating webhook URL: {'agentId': '0f319a30-900b-42fa-a9fa-87279f0e9165', 'httpWebhookUrl': 'http://localhost:6005/webhook'}
+Synced webhook URL with the registry...
+
+============================================================
+  ZYND AI AGENT
+============================================================
+  Name        : Privacy Guardian
+  Description : Anonymizes candidate profiles for blind screening by removing PII — name, gender, age, photo, email — while preserving skills and achievements.
+  Agent ID    : did:polygonid:polygon:amoy:2qV4s19Dg7MLvdbGbbVfeTW2mTcWMx5XGarrFao8rw
+  DID         : did:polygonid:polygon:amoy:2qV4s19Dg7MLvdbGbbVfeTW2mTcWMx5XGarrFao8rw
+  Address     : 0x4CC1D7Dd6aB43Ef754FeA9A11D68452b36B982a6
+  Mode        : webhook
+  Webhook URL : http://localhost:6005/webhook
+  Price       : Free
+============================================================
+
+Loaded agent config from /home/abhilash/codespace/Zynd-hack/.agent-c-bias/config.json
+Disabling x402, X402 payment config not provided
+ * Serving Flask app 'agent_did:polygonid:polygon:amoy:2qaUzCGWbEq9EcC7y9zBHZn55ptx2WC2vv3QKviNFz'
+ * Debug mode: off
+2026-02-22 03:18:19,052 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:6003
+ * Running on http://192.168.0.231:6003
+2026-02-22 03:18:19,052 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+Agent webhook server started
+Listening on http://localhost:6003/webhook
+Updating webhook URL: {'agentId': 'f3a2d15b-6402-41e8-bc12-a2e3b0e2f067', 'httpWebhookUrl': 'http://localhost:6003/webhook'}
+Synced webhook URL with the registry...
+
+============================================================
+  ZYND AI AGENT
+============================================================
+  Name        : Bias Detector
+  Description : Detects and flags algorithmic, linguistic and structural biases in job descriptions and hiring criteria.
+  Agent ID    : did:polygonid:polygon:amoy:2qaUzCGWbEq9EcC7y9zBHZn55ptx2WC2vv3QKviNFz
+  DID         : did:polygonid:polygon:amoy:2qaUzCGWbEq9EcC7y9zBHZn55ptx2WC2vv3QKviNFz
+  Address     : 0x77E121BEAE7C5B49c8e474462C92A5692F6Bf510
+  Mode        : webhook
+  Webhook URL : http://localhost:6003/webhook
+  Price       : Free
+============================================================
+
+Loaded agent config from /home/abhilash/codespace/Zynd-hack/.agent-c-skill/config.json
+INFO:     127.0.0.1:34000 - "GET /health HTTP/1.1" 200 OK
+Disabling x402, X402 payment config not provided
+ * Serving Flask app 'agent_did:polygonid:polygon:amoy:2qWKTk5N6mghwZTUZ1XQyHUNEh9W9WN37mHYeRPFnK'
+ * Debug mode: off
+2026-02-22 03:18:20,731 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:6002
+ * Running on http://192.168.0.231:6002
+2026-02-22 03:18:20,732 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+Agent webhook server started
+Listening on http://localhost:6002/webhook
+Updating webhook URL: {'agentId': '3c64d6e6-1cae-408a-bbe5-9e32f426ee9e', 'httpWebhookUrl': 'http://localhost:6002/webhook'}
+Synced webhook URL with the registry...
+
+============================================================
+  ZYND AI AGENT
+============================================================
+  Name        : Skill Verifier
+  Description : Verifies candidate technical skills using portfolio analysis and evidence-based scoring with bias-free assessment.
+  Agent ID    : did:polygonid:polygon:amoy:2qWKTk5N6mghwZTUZ1XQyHUNEh9W9WN37mHYeRPFnK
+  DID         : did:polygonid:polygon:amoy:2qWKTk5N6mghwZTUZ1XQyHUNEh9W9WN37mHYeRPFnK
+  Address     : 0xDAB59a1f824aFfA1E3aF4DE1b9e2B7190c47BC96
+  Mode        : webhook
+  Webhook URL : http://localhost:6002/webhook
+  Price       : Free
+============================================================
+
+Loaded agent config from /home/abhilash/codespace/Zynd-hack/.agent-c-matcher/config.json
+Disabling x402, X402 payment config not provided
+ * Serving Flask app 'agent_did:polygonid:polygon:amoy:2qbBNbJJtGpDFHERDZHoRx9EKPDc5X38VmXwCDT5nV'
+ * Debug mode: off
+2026-02-22 03:18:22,380 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:6004
+ * Running on http://192.168.0.231:6004
+2026-02-22 03:18:22,380 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+INFO:     127.0.0.1:34010 - "GET /api/jobs HTTP/1.1" 200 OK
+Agent webhook server started
+Listening on http://localhost:6004/webhook
+Updating webhook URL: {'agentId': 'abd6b214-7c0a-4910-adf9-e433547824b5', 'httpWebhookUrl': 'http://localhost:6004/webhook'}
+Synced webhook URL with the registry...
+
+============================================================
+  ZYND AI AGENT
+============================================================
+  Name        : Candidate Matcher
+  Description : Objectively matches anonymized candidate skill profiles to job requirements using transparent scoring.
+  Agent ID    : did:polygonid:polygon:amoy:2qbBNbJJtGpDFHERDZHoRx9EKPDc5X38VmXwCDT5nV
+  DID         : did:polygonid:polygon:amoy:2qbBNbJJtGpDFHERDZHoRx9EKPDc5X38VmXwCDT5nV
+  Address     : 0xdD6BB314797F20A2d403084EFC23B546Ca0A674B
+  Mode        : webhook
+  Webhook URL : http://localhost:6004/webhook
+  Price       : Free
+============================================================
+
+Loaded agent config from /home/abhilash/codespace/Zynd-hack/.agent-c-credential/config.json
+Disabling x402, X402 payment config not provided
+ * Serving Flask app 'agent_did:polygonid:polygon:amoy:2qVmVG8k8QSX3i4cPft9ZvPYmAC3Xi5rSjobYq7zKe'
+ * Debug mode: off
+2026-02-22 03:18:24,037 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:6006
+ * Running on http://192.168.0.231:6006
+2026-02-22 03:18:24,038 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+INFO:     127.0.0.1:34022 - "GET /health HTTP/1.1" 200 OK
+Agent webhook server started
+Listening on http://localhost:6006/webhook
+Updating webhook URL: {'agentId': 'dba593ff-142b-40a5-8ca6-1f73050009d1', 'httpWebhookUrl': 'http://localhost:6006/webhook'}
+Synced webhook URL with the registry...
+
+============================================================
+  ZYND AI AGENT
+============================================================
+  Name        : Credential Issuer
+  Description : Issues W3C-standard Verifiable Credentials for verified candidate skills and creates transparent hiring audit trails.
+  Agent ID    : did:polygonid:polygon:amoy:2qVmVG8k8QSX3i4cPft9ZvPYmAC3Xi5rSjobYq7zKe
+  DID         : did:polygonid:polygon:amoy:2qVmVG8k8QSX3i4cPft9ZvPYmAC3Xi5rSjobYq7zKe
+  Address     : 0x9a5d4739d6edC9AC5eD82e4024a770f4fCFd1E90
+  Mode        : webhook
+  Webhook URL : http://localhost:6006/webhook
+  Price       : Free
+============================================================
+
+Loaded agent config from /home/abhilash/codespace/Zynd-hack/.agent-c-orchestrator/config.json
+Disabling x402, X402 payment config not provided
+ * Serving Flask app 'agent_did:polygonid:polygon:amoy:2qSrva3edeG8JFZtTfvCep8cktHZve8CYCLAoxa1TG'
+ * Debug mode: off
+2026-02-22 03:18:25,692 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:6001
+ * Running on http://192.168.0.231:6001
+2026-02-22 03:18:25,692 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+INFO:     127.0.0.1:34030 - "GET /health HTTP/1.1" 200 OK
+Agent webhook server started
+Listening on http://localhost:6001/webhook
+Updating webhook URL: {'agentId': 'e1937daf-dee5-4f35-8820-d47cbbd3b914', 'httpWebhookUrl': 'http://localhost:6001/webhook'}
+Synced webhook URL with the registry...
+
+============================================================
+  ZYND AI AGENT
+============================================================
+  Name        : Orchestrator
+  Description : Central orchestrator for the Fair Hiring Network. Coordinates the full multi-agent, bias-free candidate evaluation pipeline using Zynd Protocol.
+  Agent ID    : did:polygonid:polygon:amoy:2qSrva3edeG8JFZtTfvCep8cktHZve8CYCLAoxa1TG
+  DID         : did:polygonid:polygon:amoy:2qSrva3edeG8JFZtTfvCep8cktHZve8CYCLAoxa1TG
+  Address     : 0xEf5bB7E9a91f19C470ad84d6c25c3b2d68714146
+  Mode        : webhook
+  Webhook URL : http://localhost:6001/webhook
+  Price       : Free
+============================================================
+
+INFO:     127.0.0.1:51598 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51602 - "POST /api/auth/login HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:59012 - "POST /api/auth/signup HTTP/1.1" 201 Created
+INFO:     127.0.0.1:59022 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59034 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59038 - "POST /api/auth/signup HTTP/1.1" 409 Conflict
+INFO:     127.0.0.1:35434 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35448 - "POST /api/apply HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35462 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50728 - "POST /api/apply HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59558 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59568 - "GET /api/jobs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59578 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40072 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59382 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47884 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47886 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47902 - "GET /api/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47140 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47150 - "GET /api/jobs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47156 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57392 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38868 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33856 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33868 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33882 - "GET /api/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57088 - "GET /api/history/e086ab49 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51250 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51252 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51258 - "GET /api/jobs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53942 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49382 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40182 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52498 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52502 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52518 - "GET /api/jobs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56108 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56108 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56112 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56128 - "GET /api/applications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56134 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56128 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56112 - "OPTIONS /api/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56134 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56108 - "OPTIONS /api/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56112 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56136 - "GET /api/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56134 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56136 - "GET /api/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56136 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56134 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56112 - "GET /api/applications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56136 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56134 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56108 - "GET /api/applications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56108 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56134 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56136 - "GET /api/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56108 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56134 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56136 - "GET /api/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56134 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56108 - "GET /api/applications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56136 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56112 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56134 - "GET /api/applications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56136 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52116 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52130 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52116 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52146 - "WebSocket /ws" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:52130 - "GET /health HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     127.0.0.1:52160 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52174 - "WebSocket /ws" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     127.0.0.1:52130 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52160 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52130 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52160 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52160 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52130 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52116 - "GET /api/applications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52160 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52130 - "GET /api/applications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52184 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37918 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59232 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59242 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59252 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59242 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59242 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59242 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59242 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57814 - "GET /api/jobs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57822 - "OPTIONS /api/apply HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57834 - "POST /api/apply HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57842 - "WebSocket /ws" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     127.0.0.1:57822 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57834 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57822 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38116 - "WebSocket /ws" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     127.0.0.1:57822 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38124 - "WebSocket /ws" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:38130 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43620 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36384 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56738 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56748 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53178 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57096 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57106 - "GET /api/jobs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41244 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41252 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56480 - "GET /health HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     127.0.0.1:56480 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56492 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56502 - "GET /api/applications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56480 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56492 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56516 - "GET /api/applications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56492 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56516 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56492 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50226 - "WebSocket /ws" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:56516 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56516 - "GET /health HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     127.0.0.1:56492 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56516 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56480 - "GET /api/applications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56492 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56492 - "GET /api/applications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56516 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56516 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56492 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56480 - "GET /api/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56516 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56492 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56480 - "GET /api/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56480 - "OPTIONS /api/history/8474f566 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56492 - "GET /api/history/8474f566 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39210 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41108 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58402 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58414 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58424 - "GET /api/jobs HTTP/1.1" 200 OK

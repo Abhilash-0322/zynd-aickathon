@@ -31,11 +31,11 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import uvicorn
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, BackgroundTasks, HTTPException
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, BackgroundTasks, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
-from pydantic import BaseModel
+from fastapi.responses import FileResponse, JSONResponse
+from pydantic import BaseModel, ValidationError
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -122,6 +122,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Custom validation error handler for user-friendly messages
+from fastapi.exceptions import RequestValidationError
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    errors = []
+    for err in exc.errors():
+        field = err.get("loc", ["", ""])[-1]
+        msg = err.get("msg", "Invalid value").replace("Value error, ", "")
+        errors.append(f"{field}: {msg}")
+    return JSONResponse(
+        status_code=422,
+        content={"detail": "; ".join(errors)},
+    )
+
 # Include auth routes
 app.include_router(auth_router)
 
@@ -207,8 +222,41 @@ def _ws_emit(token: str, event_type: str, agent_name: str, meta: dict):
 # Pipeline runner (called in executor thread)
 # ─────────────────────────────────────────────────────────────────────────────
 def _run_pipeline_sync(application: dict, application_id: str, db_app_id=None):
+    """Run the pipeline, collecting all events/thinking data for DB persistence."""
+
+    # Buffers to collect events and thinking data during pipeline execution
+    event_buffer: list[dict] = []
+    thinking_buffers: dict[str, dict] = {}  # agent_name -> {tokens, started_at, completed_at}
+
+    def collecting_emit(token: str, event_type: str, agent_name: str, meta: dict):
+        """Wraps _ws_emit to also buffer events for persistence."""
+        # Forward to real WS broadcast
+        _ws_emit(token, event_type, agent_name, meta)
+
+        # Collect thinking data
+        if event_type == "thinking_start":
+            thinking_buffers[agent_name] = {
+                "tokens": "",
+                "started_at": datetime.utcnow(),
+                "completed_at": None,
+            }
+        elif event_type == "token" and agent_name in thinking_buffers:
+            thinking_buffers[agent_name]["tokens"] += token
+        elif event_type == "thinking_end" and agent_name in thinking_buffers:
+            thinking_buffers[agent_name]["completed_at"] = datetime.utcnow()
+
+        # Buffer events (skip raw tokens to keep event log manageable)
+        if event_type != "token":
+            event_buffer.append({
+                "agent_name": agent_name,
+                "event_type": event_type,
+                "step": meta.get("step") or meta.get("message") or token,
+                "status": meta.get("status"),
+                "data": {k: v for k, v in meta.items() if k not in ("agent_name",)} if meta else None,
+            })
+
     try:
-        result = _pipeline.run(application, _ws_emit)
+        result = _pipeline.run(application, collecting_emit)
         _results_db[application_id] = result
 
         # Persist to PostgreSQL
@@ -216,31 +264,55 @@ def _run_pipeline_sync(application: dict, application_id: str, db_app_id=None):
             try:
                 db = SessionLocal()
                 # Extract scores from result
+                # Pipeline stores scores under result["summary"] key
                 results = result or {}
+                summary = results.get("summary", results)  # fallback to top-level if no "summary" key
                 crud.save_pipeline_result(
                     db,
                     application_id=db_app_id,
-                    privacy_score=results.get("privacy_score", 0),
-                    bias_free_score=results.get("bias_free_score", 0),
-                    skill_score=results.get("skill_score", 0),
-                    match_score=results.get("match_score", 0),
-                    overall_score=results.get("overall_score", 0),
-                    recommendation=results.get("final_decision", ""),
-                    executive_summary=results.get("executive_summary", ""),
-                    key_strengths=results.get("key_strengths", []),
-                    skill_gaps=results.get("skill_gaps", []),
-                    next_steps=results.get("next_steps", []),
-                    fairness_guarantee=results.get("fairness_guarantee", ""),
-                    credential_id=results.get("credential_id", ""),
+                    privacy_score=summary.get("privacy_score", 0),
+                    bias_free_score=summary.get("bias_free_score", 0),
+                    skill_score=summary.get("skill_score", 0),
+                    match_score=summary.get("match_score", 0),
+                    overall_score=summary.get("overall_score", 0),
+                    recommendation=summary.get("final_decision", "") or summary.get("recommendation", ""),
+                    executive_summary=summary.get("executive_summary", ""),
+                    key_strengths=summary.get("key_strengths", []),
+                    skill_gaps=summary.get("skill_gaps", []),
+                    next_steps=summary.get("next_steps", []),
+                    fairness_guarantee=summary.get("fairness_guarantee", ""),
+                    credential_id=summary.get("credential_id", ""),
                     raw_result=result,
                 )
+
+                # Persist agent thinking data
+                if thinking_buffers:
+                    thinkings_to_save = [
+                        {
+                            "agent_name": agent_name,
+                            "thinking_text": buf["tokens"],
+                            "started_at": buf["started_at"],
+                            "completed_at": buf["completed_at"],
+                        }
+                        for agent_name, buf in thinking_buffers.items()
+                        if buf["tokens"]  # Only save if there's actual content
+                    ]
+                    if thinkings_to_save:
+                        crud.save_agent_thinkings_bulk(db, application_id=db_app_id, thinkings=thinkings_to_save)
+                        log.info(f"Persisted {len(thinkings_to_save)} agent thinking records for {application_id}")
+
+                # Persist pipeline events
+                if event_buffer:
+                    count = crud.save_pipeline_events_bulk(db, application_id=db_app_id, events=event_buffer)
+                    log.info(f"Persisted {count} pipeline events for {application_id}")
+
                 from datetime import datetime as dt
                 crud.update_application_status(
                     db, db_app_id, "completed",
                     completed_at=dt.now()
                 )
                 db.close()
-                log.info(f"Pipeline result persisted to DB for {application_id}")
+                log.info(f"Pipeline result + history persisted to DB for {application_id}")
             except Exception as db_exc:
                 log.warning(f"Failed to persist result to DB: {db_exc}")
     except Exception as exc:
@@ -253,6 +325,22 @@ def _run_pipeline_sync(application: dict, application_id: str, db_app_id=None):
             try:
                 db = SessionLocal()
                 crud.update_application_status(db, db_app_id, "failed")
+                # Still persist whatever events we collected before the error
+                if event_buffer:
+                    crud.save_pipeline_events_bulk(db, application_id=db_app_id, events=event_buffer)
+                if thinking_buffers:
+                    thinkings_to_save = [
+                        {
+                            "agent_name": agent_name,
+                            "thinking_text": buf["tokens"],
+                            "started_at": buf["started_at"],
+                            "completed_at": buf["completed_at"],
+                        }
+                        for agent_name, buf in thinking_buffers.items()
+                        if buf["tokens"]
+                    ]
+                    if thinkings_to_save:
+                        crud.save_agent_thinkings_bulk(db, application_id=db_app_id, thinkings=thinkings_to_save)
                 db.close()
             except Exception:
                 pass
@@ -320,10 +408,10 @@ async def health():
 @app.post("/api/apply")
 async def apply(
     body: ApplicationModel,
+    request: Request,
     background_tasks: BackgroundTasks,
-    user: Optional[Any] = None,
 ):
-    """Submit application. Optionally auth-aware for DB persistence."""
+    """Submit application. Auth-aware — links to user if authenticated."""
     if _pipeline is None:
         raise HTTPException(503, "Pipeline not yet initialized — try again in a moment")
 
@@ -341,17 +429,27 @@ async def apply(
         "job":       job,
     }
 
-    # Try to persist to DB if user is authenticated
+    # Try to resolve authenticated user from Authorization header
     db_app_id = None
+    user_id = None
     try:
-        from fastapi import Request
-        # Try to get token from header for optional auth
+        auth_header = request.headers.get("authorization", "")
+        if auth_header.startswith("Bearer "):
+            token = auth_header.split(" ", 1)[1]
+            db = SessionLocal()
+            session = crud.get_session(db, token)
+            if session and session.user:
+                user_id = session.user_id
+            db.close()
+    except Exception:
+        pass
+
+    try:
         db = SessionLocal()
-        # Create application record in DB
         db_app = crud.create_application(
             db,
-            candidate_id=uuid.UUID('00000000-0000-0000-0000-000000000000'),  # anonymous if no auth
-            job_id=uuid.UUID('00000000-0000-0000-0000-000000000000'),  # placeholder
+            candidate_id=user_id,           # None when anonymous — nullable in DB
+            job_id=None,                     # inline jobs don't have a DB job row
             conversation_id=app_id,
         )
         db_app_id = db_app.id
@@ -370,6 +468,7 @@ async def apply(
         "status":          "processing",
         "message":         "Pipeline started — connect to /ws for real-time updates",
         "websocket_url":   "/ws",
+        "authenticated":   user_id is not None,
     }
 
 
@@ -429,6 +528,50 @@ async def list_applications():
     except Exception as exc:
         log.warning(f"DB query failed, returning in-memory: {exc}")
         return {"applications": [], "count": 0}
+
+
+# ── Pipeline History ──────────────────────────────────────────────────────
+@app.get("/api/history")
+async def get_history(request: Request):
+    """Get pipeline run history for the authenticated user."""
+    auth_header = request.headers.get("authorization", "")
+    if not auth_header.startswith("Bearer "):
+        raise HTTPException(401, "Authentication required to view history")
+
+    token = auth_header.split(" ", 1)[1]
+    try:
+        db = SessionLocal()
+        session = crud.get_session(db, token)
+        if not session or not session.user:
+            db.close()
+            raise HTTPException(401, "Invalid or expired token")
+
+        history = crud.get_user_history(db, session.user_id)
+        db.close()
+        return {"history": history, "count": len(history)}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        log.warning(f"Failed to fetch history: {exc}")
+        raise HTTPException(500, "Failed to fetch history")
+
+
+@app.get("/api/history/{conversation_id}")
+async def get_history_detail(conversation_id: str, request: Request):
+    """Get full pipeline run detail including thinking, events, and results."""
+    # Allow unauthenticated access for shared links, but verify ownership for auth users
+    try:
+        db = SessionLocal()
+        detail = crud.get_application_history_by_conversation(db, conversation_id)
+        db.close()
+        if not detail:
+            raise HTTPException(404, f"No pipeline run found for {conversation_id!r}")
+        return detail
+    except HTTPException:
+        raise
+    except Exception as exc:
+        log.warning(f"Failed to fetch history detail: {exc}")
+        raise HTTPException(500, "Failed to fetch history detail")
 
 
 # ── Jobs CRUD ─────────────────────────────────────────────────────────────
