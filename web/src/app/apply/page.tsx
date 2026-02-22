@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -193,6 +193,7 @@ function classifyEvent(msgType: string, payload: Record<string, unknown>): "runn
 function ApplyPageInner() {
   const searchParams = useSearchParams();
   const selectedJobId = searchParams.get("jobId");
+  const router = useRouter();
 
   const [candidate, setCandidate] = useState({
     name: "",
@@ -520,6 +521,7 @@ function ApplyPageInner() {
       }
 
       setConversationId(String(id));
+      router.push(`/live?id=${id}`);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {

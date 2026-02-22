@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Brain,
@@ -20,6 +21,35 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import { API_URL, cn, getWsUrl } from "@/lib/utils";
+
+/* ─── Submission tracking banner ─────────────────────────────────────────── */
+
+function SubmissionBannerInner() {
+  const params = useSearchParams();
+  const id = params.get("id");
+  if (!id) return null;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -8 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="mb-6 flex items-center gap-3 rounded-xl border border-sky-400/25 bg-sky-500/10 px-4 py-3 text-sm text-sky-200"
+    >
+      <Radio className="h-4 w-4 shrink-0 animate-pulse text-sky-400" />
+      <span>
+        Tracking your submission —{" "}
+        <span className="font-mono font-semibold text-sky-100">#{id}</span>
+      </span>
+    </motion.div>
+  );
+}
+
+function SubmissionBanner() {
+  return (
+    <Suspense fallback={null}>
+      <SubmissionBannerInner />
+    </Suspense>
+  );
+}
 
 /* ─── Agent definitions ──────────────────────────────────────────────────── */
 
@@ -574,6 +604,7 @@ export default function LivePage() {
       <Navbar />
 
       <main className="mx-auto max-w-7xl px-4 page-offset pb-20 sm:px-6 lg:px-8">
+        <SubmissionBanner />
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
