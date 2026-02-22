@@ -11,16 +11,60 @@ from typing import Optional, Dict, Any, List, Callable
 from dotenv import load_dotenv
 load_dotenv()
 
-from langchain_ollama import ChatOllama
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from zyndai_agent import AgentConfig, ZyndAIAgent
 
-# ── Environment ────────────────────────────────────────────────────────────────
+# ── Environment ──────────────────────────────────────────────────────────────────
 ZYND_REGISTRY_URL = os.environ.get("ZYND_REGISTRY_URL", "https://registry.zynd.ai")
 ZYND_API_KEY      = os.environ.get("ZYND_API_KEY", "")
-BIG_MODEL         = os.environ.get("BIG_MODEL",    "glm-5:cloud")
-SMALL_MODEL       = os.environ.get("SMALL_MODEL",  "llama3.2:3b")
 OLLAMA_BASE_URL   = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
+
+# LLM provider: "ollama" (default, local), "openai", or "groq"
+LLM_PROVIDER = os.environ.get("LLM_PROVIDER", "ollama").lower()
+
+# Resolved model names per provider (configurable via env)
+_PROVIDER_BIG: Dict[str, str] = {
+    "ollama":  os.environ.get("BIG_MODEL",          "glm-5:cloud"),
+    "openai":  os.environ.get("OPENAI_BIG_MODEL",   "gpt-4o"),
+    "groq":    os.environ.get("GROQ_BIG_MODEL",     "llama-3.3-70b-versatile"),
+}
+_PROVIDER_SMALL: Dict[str, str] = {
+    "ollama":  os.environ.get("SMALL_MODEL",         "llama3.2:3b"),
+    "openai":  os.environ.get("OPENAI_SMALL_MODEL",  "gpt-4o-mini"),
+    "groq":    os.environ.get("GROQ_SMALL_MODEL",    "llama-3.1-8b-instant"),
+}
+BIG_MODEL   = _PROVIDER_BIG.get(LLM_PROVIDER,   _PROVIDER_BIG["ollama"])
+SMALL_MODEL = _PROVIDER_SMALL.get(LLM_PROVIDER, _PROVIDER_SMALL["ollama"])
+
+
+def get_llm(model_name: str, temperature: float = 0.1):
+    """
+    Factory that returns the appropriate LangChain chat model based on LLM_PROVIDER.
+    • ollama  → ChatOllama (local, dev default)
+    • openai  → ChatOpenAI (requires OPENAI_API_KEY)
+    • groq    → ChatGroq   (requires GROQ_API_KEY)
+    """
+    if LLM_PROVIDER == "openai":
+        from langchain_openai import ChatOpenAI
+        return ChatOpenAI(
+            model=model_name,
+            temperature=temperature,
+            api_key=os.environ.get("OPENAI_API_KEY"),
+        )
+    elif LLM_PROVIDER == "groq":
+        from langchain_groq import ChatGroq
+        return ChatGroq(
+            model=model_name,
+            temperature=temperature,
+            api_key=os.environ.get("GROQ_API_KEY"),
+        )
+    else:  # ollama (default)
+        from langchain_ollama import ChatOllama
+        return ChatOllama(
+            model=model_name,
+            base_url=OLLAMA_BASE_URL,
+            temperature=temperature,
+        )
 
 # Zynd webhook ports — used only for DID registration, NOT for inter-agent comms
 AGENT_PORTS: Dict[str, int] = {
@@ -90,11 +134,7 @@ class BaseAgent:
     def __init__(self):
         self.logger = logging.getLogger(f"FairHiring.{self.name}")
         self.memory = AgentMemory(self.system_prompt)
-        self.llm    = ChatOllama(
-            model=self.model,
-            base_url=OLLAMA_BASE_URL,
-            temperature=0.1,
-        )
+        self.llm    = get_llm(self.model, temperature=0.1)
         self.zynd_agent: Optional[ZyndAIAgent] = None
         self._registered = False
 

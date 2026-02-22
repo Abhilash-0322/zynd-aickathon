@@ -4,6 +4,7 @@ SQLAlchemy 2.0 models and engine setup for PostgreSQL.
 """
 
 import enum
+import os
 import uuid
 from datetime import datetime, timezone
 
@@ -30,7 +31,15 @@ from sqlalchemy.orm import (
     sessionmaker,
 )
 
-DATABASE_URL = "postgresql://zynd_user:zynd_hack_2026@localhost:5432/zynd_hiring"
+import os
+
+DATABASE_URL = os.environ.get(
+    "DATABASE_URL",
+    "postgresql://zynd_user:zynd_hack_2026@localhost:5432/zynd_hiring",
+)
+# Render provides postgres:// URIs; SQLAlchemy requires postgresql://
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 engine = create_engine(DATABASE_URL, pool_pre_ping=True, pool_size=10, max_overflow=20)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)

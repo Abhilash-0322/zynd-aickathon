@@ -140,10 +140,24 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 # Include auth routes
 app.include_router(auth_router)
 
-# Serve frontend
-_FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "frontend")
-if os.path.isdir(_FRONTEND_DIR):
+# ── Static file serving ─────────────────────────────────────────────────────────────────
+# In production, serve the Next.js static export from web/out.
+# In dev, serve the legacy HTML frontend/ directory.
+_ROOT_DIR      = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_NEXT_OUT_DIR  = os.path.join(_ROOT_DIR, "web", "out")
+_FRONTEND_DIR  = os.path.join(_ROOT_DIR, "frontend")
+
+if os.path.isdir(_NEXT_OUT_DIR):
+    # Mount Next.js chunk assets at /_next
+    _next_chunks = os.path.join(_NEXT_OUT_DIR, "_next")
+    if os.path.isdir(_next_chunks):
+        app.mount("/_next", StaticFiles(directory=_next_chunks), name="nextjs-chunks")
+    # Mount other public assets (images, icons) at top level
+    app.mount("/public", StaticFiles(directory=_NEXT_OUT_DIR), name="nextjs-public")
+    log.info(f"Serving Next.js static export from {_NEXT_OUT_DIR}")
+elif os.path.isdir(_FRONTEND_DIR):
     app.mount("/static", StaticFiles(directory=_FRONTEND_DIR), name="static")
+    log.info(f"Serving legacy frontend from {_FRONTEND_DIR}")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -387,9 +401,11 @@ class JobModel(BaseModel):
 # ─────────────────────────────────────────────────────────────────────────────
 @app.get("/")
 async def index():
-    idx = os.path.join(_FRONTEND_DIR, "index.html")
-    if os.path.isfile(idx):
-        return FileResponse(idx)
+    # Prefer Next.js build, fall back to legacy frontend
+    for _dir in (_NEXT_OUT_DIR, _FRONTEND_DIR):
+        idx = os.path.join(_dir, "index.html")
+        if os.path.isfile(idx):
+            return FileResponse(idx)
     return {"message": "Fair Hiring Network — Centralized API", "version": "2.0.0"}
 
 
@@ -612,12 +628,11 @@ def _extract_resume_text(filename: str, content: bytes) -> str:
 
 
 def _parse_resume_with_llm(raw_text: str) -> dict:
-    """Use the local LLM (SMALL_MODEL) to extract structured candidate fields."""
-    from langchain_ollama import ChatOllama
+    """Use the configured LLM provider to extract structured candidate fields."""
     from langchain_core.messages import HumanMessage, SystemMessage
-    from centralized.agents.base import SMALL_MODEL, OLLAMA_BASE_URL
+    from centralized.agents.base import get_llm, SMALL_MODEL
 
-    llm = ChatOllama(model=SMALL_MODEL, base_url=OLLAMA_BASE_URL, temperature=0)
+    llm = get_llm(SMALL_MODEL, temperature=0)
     snippet = raw_text[:4000]  # keep prompt manageable
     prompt = f"""Extract candidate information from this resume. Return ONLY a valid JSON object with exactly these keys:
 - "name": string (full name)
@@ -813,6 +828,34 @@ async def websocket_endpoint(websocket: WebSocket):
         pass
     finally:
         await manager.disconnect(websocket)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SPA catch-all — MUST be the last route registered.
+# Serves Next.js pages by mapping request paths to the static export output.
+# Handles both trailingSlash:true (/apply/index.html) and false (/apply.html).
+# ─────────────────────────────────────────────────────────────────────────────
+if os.path.isdir(_NEXT_OUT_DIR):
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def serve_spa(full_path: str):
+        """Serve Next.js pages from the static export. Falls back to index.html."""
+        # 1 — exact file (assets like favicon.ico, robots.txt, images)
+        candidate = os.path.join(_NEXT_OUT_DIR, full_path)
+        if os.path.isfile(candidate):
+            return FileResponse(candidate)
+        # 2 — <path>.html  (Next.js without trailingSlash)
+        html_file = os.path.join(_NEXT_OUT_DIR, full_path.rstrip("/") + ".html")
+        if os.path.isfile(html_file):
+            return FileResponse(html_file)
+        # 3 — <path>/index.html  (Next.js with trailingSlash: true)
+        index_file = os.path.join(_NEXT_OUT_DIR, full_path.rstrip("/"), "index.html")
+        if os.path.isfile(index_file):
+            return FileResponse(index_file)
+        # 4 — root index.html fallback
+        root_index = os.path.join(_NEXT_OUT_DIR, "index.html")
+        if os.path.isfile(root_index):
+            return FileResponse(root_index)
+        return JSONResponse({"detail": "Not found"}, status_code=404)
 
 
 # ─────────────────────────────────────────────────────────────────────────────

@@ -1,0 +1,75 @@
+# ────────────────────────────────────────────────────────────────────────────
+# Render deployment configuration
+# https://render.com/docs/render-yaml-spec
+#
+# Deploy steps on Render dashboard:
+#  1. Connect your GitHub repo
+#  2. Render auto-detects render.yaml
+#  3. Add secret env vars (GROQ_API_KEY, OPENAI_API_KEY, ZYND_API_KEY,
+#     DATABASE_URL) via the Environment tab — do NOT put real secrets here.
+# ────────────────────────────────────────────────────────────────────────────
+services:
+  - type: web
+    name: zynd-hiring-network
+    runtime: python
+    region: oregon          # change to your preferred region
+    plan: free              # upgrade to starter for always-on
+
+    # Build: install Python deps + build Next.js static export
+    buildCommand: |
+      pip install -r requirements.txt
+      cd web && npm ci && NEXT_PUBLIC_API_URL="" npm run build && cd ..
+
+    # Start: FastAPI serves both API and static Next.js files
+    startCommand: >
+      python -m uvicorn centralized.server:app
+      --host 0.0.0.0
+      --port $PORT
+      --log-level info
+
+    # Health check path
+    healthCheckPath: /health
+
+    envVars:
+      # ── LLM Provider ──────────────────────────────────────────────────────
+      - key: LLM_PROVIDER
+        value: groq           # switch to "openai" if preferred
+
+      # Groq API key — set via Render dashboard (mark as secret)
+      - key: GROQ_API_KEY
+        sync: false           # set in dashboard, not committed here
+
+      # Groq model names (defaults are fine, override if needed)
+      - key: GROQ_BIG_MODEL
+        value: llama-3.3-70b-versatile
+      - key: GROQ_SMALL_MODEL
+        value: llama-3.1-8b-instant
+
+      # OpenAI (optional fallback)
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_BIG_MODEL
+        value: gpt-4o
+      - key: OPENAI_SMALL_MODEL
+        value: gpt-4o-mini
+
+      # ── Zynd Protocol ─────────────────────────────────────────────────────
+      - key: ZYND_API_KEY
+        sync: false
+      - key: ZYND_REGISTRY_URL
+        value: https://registry.zynd.ai
+
+      # ── Database ──────────────────────────────────────────────────────────
+      # Use Render's managed PostgreSQL — paste the Internal Database URL here
+      - key: DATABASE_URL
+        sync: false           # set in dashboard
+
+      # ── Python path ───────────────────────────────────────────────────────
+      - key: PYTHONUNBUFFERED
+        value: "1"
+
+databases:
+  - name: zynd-hiring-db
+    plan: free
+    databaseName: zynd_hiring
+    user: zynd_user
