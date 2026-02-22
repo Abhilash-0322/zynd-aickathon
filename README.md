@@ -34,24 +34,35 @@ open http://localhost:8000
 
 ## 🏗️ Architecture
 
-TalentInfra runs as a **single-process monolith** — all 6 agents + FastAPI + Next.js frontend served from one `uvicorn` process. No microservices to manage.
+TalentInfra runs as a **single-process monolith** — all 6 agents + FastAPI + Next.js frontend served from one `uvicorn` process. Each agent registers a **DID on the Zynd Protocol registry** at startup for authenticated, verifiable inter-agent identity.
 
 ```
+╔══════════════════════════════════════════════════════════════════╗
+║               ZYND PROTOCOL REGISTRY                            ║
+║         registry.zynd.ai  —  DID-based agent identity          ║
+║                                                                  ║
+║  Each agent registers a DID + capability manifest at startup.   ║
+║  Identity credentials are verified on every agent interaction.  ║
+╚══════════╤═══════════╤══════════╤══════════╤════════════════════╝
+           │ DID reg   │ DID reg  │ DID reg  │ … (×6 agents)
+           ▼           ▼          ▼          ▼
 ┌──────────────────────────────────────────────────────────────────┐
 │                      TalentInfra Server                          │
 │                   (centralized/server.py)                        │
 │                                                                  │
 │  ┌─────────────────────────────────────────────────────────┐    │
-│  │                  PipelineRunner                         │    │
+│  │               PipelineRunner (pipeline.py)              │    │
 │  │                                                         │    │
 │  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐  │    │
 │  │  │ Privacy  │ │  Bias    │ │  Skill   │ │Candidate │  │    │
 │  │  │ Guardian │ │ Detector │ │ Verifier │ │ Matcher  │  │    │
+│  │  │ did:zynd │ │ did:zynd │ │ did:zynd │ │ did:zynd │  │    │
 │  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘  │    │
-│  │  ┌──────────┐ ┌──────────┐                             │    │
-│  │  │Credential│ │Orchestr- │                             │    │
-│  │  │  Issuer  │ │  ator    │                             │    │
-│  │  └──────────┘ └──────────┘                             │    │
+│  │  ┌──────────┐ ┌───────────────────────┐                │    │
+│  │  │Credential│ │      Orchestrator     │                │    │
+│  │  │  Issuer  │ │ (final decision node) │                │    │
+│  │  │ did:zynd │ │       did:zynd        │                │    │
+│  │  └──────────┘ └───────────────────────┘                │    │
 │  └─────────────────────────────────────────────────────────┘    │
 │                                                                  │
 │  FastAPI REST API  ·  WebSocket /ws  ·  Next.js static export   │
@@ -62,6 +73,17 @@ TalentInfra runs as a **single-process monolith** — all 6 agents + FastAPI + N
                     │  SQLite (local)    │
                     └────────────────────┘
 ```
+
+### How Zynd Protocol Powers TalentInfra
+
+| Zynd Feature | Usage in TalentInfra |
+|---|---|
+| **DID Registration** | Every agent gets a unique `did:zynd:…` identity at startup via `ZyndAIAgent` |
+| **AgentConfig** | Each agent declares its `name`, `description`, `capabilities` in the Zynd registry |
+| **Identity Credentials** | Agent DID shown in the live UI audit trail for every pipeline step |
+| **Verifiable Credentials** | The Credential Issuer agent issues W3C VCs under its Zynd DID (`did:zynd:fair-hiring-network:issuer`) |
+| **Authenticated Communication** | All inter-agent calls carry DID-verified identity — no anonymous agents |
+| **Webhook Ports** | Each agent registers a webhook endpoint (ports 6001–6006) for Zynd-initiated messages |
 
 ---
 
