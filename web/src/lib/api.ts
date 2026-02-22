@@ -1,8 +1,15 @@
 import Cookies from "js-cookie";
 import type { Application, Job, PipelineResult, User, WebSocketMessage } from "@/types";
+import { getWsUrl } from "@/lib/utils";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-const WS_URL = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8000/ws";
+// ?? preserves empty string (same-origin production) vs || which would fall through.
+// In production on Azure, hostname != localhost → API_URL becomes "" (relative).
+const API_URL = (() => {
+  if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
+    return ""; // same-origin: FastAPI serves both API and frontend
+  }
+  return process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+})();
 const TOKEN_KEY = "zynd_token";
 
 function getToken(): string | undefined {
@@ -213,7 +220,8 @@ export function createWebSocket(
 
   function connect() {
     const token = getToken();
-    const url = token ? `${WS_URL}?token=${token}` : WS_URL;
+    const baseWs = getWsUrl();
+    const url = token ? `${baseWs}?token=${token}` : baseWs;
     ws = new WebSocket(url);
 
     ws.onopen = () => {

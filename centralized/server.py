@@ -847,7 +847,7 @@ async def websocket_endpoint(websocket: WebSocket):
 # Handles both trailingSlash:true (/apply/index.html) and false (/apply.html).
 # ─────────────────────────────────────────────────────────────────────────────
 if os.path.isdir(_NEXT_OUT_DIR):
-    @app.get("/{full_path:path}", include_in_schema=False)
+    @app.api_route("/{full_path:path}", methods=["GET", "HEAD"], include_in_schema=False)
     async def serve_spa(full_path: str):
         """Serve Next.js pages from the static export. Falls back to index.html."""
         # 1 — exact file (assets like favicon.ico, robots.txt, images)

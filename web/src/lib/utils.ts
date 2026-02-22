@@ -1,7 +1,16 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+// In production (deployed), FastAPI serves both the API and the frontend on the
+// same origin, so all API calls should be relative (empty string). We detect this
+// at runtime: if NOT localhost, use relative URLs. Dev keeps localhost:8000.
+function _resolveApiUrl(): string {
+  if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
+    return ""; // same-origin production
+  }
+  return process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+}
+export const API_URL = _resolveApiUrl();
 
 /**
  * Returns the WebSocket URL for the backend.

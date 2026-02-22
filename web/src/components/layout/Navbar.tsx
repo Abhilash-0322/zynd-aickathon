@@ -21,11 +21,11 @@ const NAV_LINKS = [
 function Logo() {
   return (
     <Link href="/" className="flex items-center gap-3">
-      <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-sky-400/30 bg-sky-500/12">
+      <span className="flex h-12 w-10 items-center justify-center rounded-xl border border-sky-400/30 bg-sky-500/12">
         <span className="h-2.5 w-2.5 rounded-full bg-emerald-300 shadow-[0_0_18px_rgba(52,211,153,0.75)]" />
       </span>
       <span className="leading-tight">
-        <span className="block text-sm font-semibold text-white">TalentInfra</span>
+        <span className="block text-xl font-semibold text-white">TalentInfra</span>
         <span className="block text-[10px] uppercase tracking-[0.18em] text-slate-400">
           a fair hiring network powered by Zynd Protocol
         </span>
