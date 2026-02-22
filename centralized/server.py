@@ -78,6 +78,22 @@ async def lifespan(app: FastAPI):
     # Register agents on Zynd in a background thread to not block startup
     threading.Thread(target=_pipeline.register_all, daemon=True, name="zynd-reg").start()
 
+    # Initialize DB in a background thread so the server starts immediately
+    # (Azure's startup probe only has a 230s window — don't block the event loop)
+    def _init_db_background():
+        import time as _time
+        for _att in range(5):
+            try:
+                log.info("DB init attempt %d/5…", _att + 1)
+                init_db()
+                log.info("Database ready.")
+                return
+            except Exception as _e:
+                log.warning("DB init failed (attempt %d): %s", _att + 1, _e)
+                _time.sleep(10)
+        log.error("Could not initialize DB — running without persistent storage.")
+    threading.Thread(target=_init_db_background, daemon=True, name="db-init").start()
+
     # Seed a demo job
     demo_jid = "job-demo-1"
     _jobs_db[demo_jid] = {
@@ -97,21 +113,6 @@ async def lifespan(app: FastAPI):
         "location": "Remote",
         "equity": True,
     }
-
-    # Initialize database tables (retry up to 3× in case DB is slow to accept connections)
-    import time
-    for _attempt in range(3):
-        try:
-            log.info("Initializing PostgreSQL database… (attempt %d)", _attempt + 1)
-            init_db()
-            log.info("Database ready.")
-            break
-        except Exception as _db_err:
-            log.warning("DB init error (attempt %d): %s", _attempt + 1, _db_err)
-            if _attempt < 2:
-                time.sleep(5)
-            else:
-                log.error("Could not reach database after 3 attempts — continuing without DB.")
 
     asyncio.create_task(_broadcast_worker())
     log.info("Server ready.")
