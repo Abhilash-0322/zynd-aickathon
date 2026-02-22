@@ -31,7 +31,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import uvicorn
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, BackgroundTasks, HTTPException, Request
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, BackgroundTasks, HTTPException, Request, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -369,6 +369,7 @@ class ApplicationModel(BaseModel):
     candidate: CandidateModel
     job_id:    str = "job-demo-1"
     job:       Optional[Dict[str, Any]] = None  # inline job data
+    resume_id: Optional[str] = None             # ID of a previously parsed resume
 
 class JobModel(BaseModel):
     title:            str
@@ -453,6 +454,13 @@ async def apply(
             conversation_id=app_id,
         )
         db_app_id = db_app.id
+        # Link resume if provided
+        if body.resume_id:
+            try:
+                rid = uuid.UUID(body.resume_id)
+                crud.link_resume_to_application(db, db_app_id, rid)
+            except (ValueError, Exception) as re:
+                log.warning(f"Could not link resume {body.resume_id}: {re}")
         db.close()
     except Exception as exc:
         log.warning(f"Could not persist application to DB: {exc}")
@@ -572,6 +580,177 @@ async def get_history_detail(conversation_id: str, request: Request):
     except Exception as exc:
         log.warning(f"Failed to fetch history detail: {exc}")
         raise HTTPException(500, "Failed to fetch history detail")
+
+
+# ── Jobs CRUD ─────────────────────────────────────────────────────
+
+# ── Resume ─────────────────────────────────────────────────────────────────
+
+
+def _extract_resume_text(filename: str, content: bytes) -> str:
+    """Extract plain text from PDF, DOCX, or plain text file bytes."""
+    ext = filename.lower().rsplit(".", 1)[-1] if "." in filename else "txt"
+    try:
+        if ext == "pdf":
+            import pdfplumber, io
+            pages = []
+            with pdfplumber.open(io.BytesIO(content)) as pdf:
+                for page in pdf.pages:
+                    t = page.extract_text()
+                    if t:
+                        pages.append(t)
+            return "\n".join(pages)
+        elif ext in ("docx", "doc"):
+            import docx, io
+            doc = docx.Document(io.BytesIO(content))
+            return "\n".join(p.text for p in doc.paragraphs if p.text.strip())
+        else:  # txt, md, etc.
+            return content.decode("utf-8", errors="replace")
+    except Exception as exc:
+        log.warning(f"Text extraction failed for {filename!r}: {exc}")
+        return content.decode("utf-8", errors="replace")
+
+
+def _parse_resume_with_llm(raw_text: str) -> dict:
+    """Use the local LLM (SMALL_MODEL) to extract structured candidate fields."""
+    from langchain_ollama import ChatOllama
+    from langchain_core.messages import HumanMessage, SystemMessage
+    from centralized.agents.base import SMALL_MODEL, OLLAMA_BASE_URL
+
+    llm = ChatOllama(model=SMALL_MODEL, base_url=OLLAMA_BASE_URL, temperature=0)
+    snippet = raw_text[:4000]  # keep prompt manageable
+    prompt = f"""Extract candidate information from this resume. Return ONLY a valid JSON object with exactly these keys:
+- "name": string (full name)
+- "email": string (email address or "")
+- "experience_years": integer (total years of professional experience)
+- "education": string (highest degree + field, e.g. "BS Computer Science")
+- "skills": array of strings (technical skills, tools, languages)
+- "experience_summary": string (2-3 sentence professional summary)
+- "github_url": string (GitHub profile URL or "")
+- "portfolio_url": string (portfolio/website URL or "")
+- "certifications": array of strings (any certifications or awards)
+- "cover_letter": string (always "")
+
+Resume text:
+{snippet}
+
+Return ONLY the JSON object, no markdown fences, no explanation."""
+
+    response = llm.invoke([
+        SystemMessage(content="You are a resume parser. Return only valid JSON with no markdown."),
+        HumanMessage(content=prompt),
+    ])
+    text = response.content.strip()
+    # Strip markdown code fences if present
+    if text.startswith("```"):
+        lines = text.split("\n")
+        text = "\n".join(
+            line for line in lines
+            if not line.startswith("```")
+        ).strip()
+    return json.loads(text)
+
+
+@app.post("/api/resume/parse")
+async def parse_resume(
+    file: UploadFile = File(...),
+    request: Request = None,
+):
+    """Upload a resume (PDF / DOCX / TXT) and extract candidate fields via LLM."""
+    MAX_SIZE = 5 * 1024 * 1024  # 5 MB
+    allowed = {"pdf", "docx", "doc", "txt", "md"}
+    ext = file.filename.lower().rsplit(".", 1)[-1] if file.filename and "." in file.filename else "txt"
+    if ext not in allowed:
+        raise HTTPException(400, f"Unsupported file type .{ext}. Allowed: {', '.join(sorted(allowed))}")
+
+    content = await file.read()
+    if len(content) > MAX_SIZE:
+        raise HTTPException(413, "File too large (max 5 MB)")
+    if not content.strip():
+        raise HTTPException(400, "Empty file")
+
+    # Resolve optional auth
+    user_id = None
+    try:
+        auth_header = (request.headers.get("authorization", "") or "") if request else ""
+        if auth_header.startswith("Bearer "):
+            token = auth_header.split(" ", 1)[1]
+            db = SessionLocal()
+            session = crud.get_session(db, token)
+            if session and session.user:
+                user_id = session.user_id
+            db.close()
+    except Exception:
+        pass
+
+    loop = asyncio.get_event_loop()
+
+    # Extract text in thread (IO-bound)
+    raw_text = await loop.run_in_executor(
+        None, _extract_resume_text, file.filename or "resume", content
+    )
+    if not raw_text.strip():
+        raise HTTPException(422, "Could not extract text from the file")
+
+    # LLM parse in thread (CPU + network to Ollama)
+    try:
+        parsed = await loop.run_in_executor(None, _parse_resume_with_llm, raw_text)
+    except Exception as exc:
+        log.warning(f"LLM resume parsing failed: {exc} — returning raw text only")
+        parsed = {
+            "name": "", "email": "", "experience_years": 0,
+            "education": "", "skills": [], "experience_summary": raw_text[:500],
+            "github_url": "", "portfolio_url": "", "certifications": [], "cover_letter": "",
+        }
+
+    # Persist to DB
+    resume_id = None
+    try:
+        db = SessionLocal()
+        resume = crud.save_resume(
+            db,
+            filename=file.filename or "resume",
+            raw_text=raw_text,
+            parsed_data=parsed,
+            file_size=len(content),
+            user_id=user_id,
+        )
+        resume_id = str(resume.id)
+        db.close()
+        log.info(f"Resume saved: {resume_id} ({file.filename}, {len(content)} bytes)")
+    except Exception as exc:
+        log.warning(f"Could not persist resume to DB: {exc}")
+
+    return {
+        "resume_id": resume_id,
+        "filename": file.filename,
+        "file_size": len(content),
+        "raw_text_length": len(raw_text),
+        "parsed": parsed,
+    }
+
+
+@app.get("/api/resumes")
+async def list_resumes(request: Request):
+    """List all resumes uploaded by the authenticated user."""
+    auth_header = request.headers.get("authorization", "")
+    if not auth_header.startswith("Bearer "):
+        raise HTTPException(401, "Authentication required")
+    token = auth_header.split(" ", 1)[1]
+    try:
+        db = SessionLocal()
+        session = crud.get_session(db, token)
+        if not session or not session.user:
+            db.close()
+            raise HTTPException(401, "Invalid or expired token")
+        resumes = crud.get_user_resumes(db, session.user_id)
+        db.close()
+        return {"resumes": resumes, "count": len(resumes)}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        log.warning(f"Failed to list resumes: {exc}")
+        raise HTTPException(500, "Failed to list resumes")
 
 
 # ── Jobs CRUD ─────────────────────────────────────────────────────────────

@@ -95,6 +95,9 @@ class User(Base):
     sessions: Mapped[list["Session"]] = relationship(
         "Session", back_populates="user", lazy="selectin"
     )
+    resumes: Mapped[list["Resume"]] = relationship(
+        "Resume", back_populates="user", lazy="selectin"
+    )
 
     def __repr__(self) -> str:
         return f"<User {self.email} ({self.role.value})>"
@@ -133,6 +136,34 @@ class Job(Base):
         return f"<Job {self.title} @ {self.company}>"
 
 
+class Resume(Base):
+    """Stores uploaded resumes — raw text + LLM-extracted structured fields."""
+    __tablename__ = "resumes"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True
+    )
+    filename: Mapped[str] = mapped_column(String(500), nullable=False)
+    file_size: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    raw_text: Mapped[str | None] = mapped_column(Text, nullable=True)
+    parsed_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    uploaded_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=text("now()")
+    )
+
+    # Relationships
+    user: Mapped["User | None"] = relationship("User", back_populates="resumes", lazy="selectin")
+    applications: Mapped[list["Application"]] = relationship(
+        "Application", back_populates="resume", lazy="selectin"
+    )
+
+    def __repr__(self) -> str:
+        return f"<Resume {self.filename} user={self.user_id}>"
+
+
 class Application(Base):
     __tablename__ = "applications"
 
@@ -147,6 +178,9 @@ class Application(Base):
     )
     job_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True), ForeignKey("jobs.id", ondelete="SET NULL"), nullable=True
+    )
+    resume_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("resumes.id", ondelete="SET NULL"), nullable=True
     )
     status: Mapped[ApplicationStatus] = mapped_column(
         Enum(ApplicationStatus, name="application_status", create_constraint=True),
@@ -171,6 +205,9 @@ class Application(Base):
     )
     thinkings: Mapped[list["AgentThinking"]] = relationship(
         "AgentThinking", back_populates="application", lazy="selectin"
+    )
+    resume: Mapped["Resume | None"] = relationship(
+        "Resume", back_populates="applications", lazy="selectin"
     )
 
     def __repr__(self) -> str:

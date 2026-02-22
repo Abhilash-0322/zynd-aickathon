@@ -19,6 +19,7 @@ from api_server.database import (
     Job,
     PipelineEvent,
     PipelineResult,
+    Resume,
     Session as DbSession,
     User,
     UserRole,
@@ -423,6 +424,12 @@ def _serialize_application_summary(app: Application) -> dict[str, Any]:
     if app.job:
         summary["job_title"] = app.job.title
         summary["company"] = app.job.company
+    if app.resume:
+        summary["resume"] = {
+            "id": str(app.resume.id),
+            "filename": app.resume.filename,
+            "uploaded_at": app.resume.uploaded_at.isoformat() if app.resume.uploaded_at else None,
+        }
     return summary
 
 
@@ -519,3 +526,69 @@ def delete_session(db: Session, token: str) -> bool:
     db.delete(session)
     db.commit()
     return True
+
+
+# ── Resume CRUD ────────────────────────────────────────────────────────────────────
+
+
+def save_resume(
+    db: Session,
+    *,
+    filename: str,
+    raw_text: str,
+    parsed_data: dict,
+    file_size: Optional[int] = None,
+    user_id: Optional[uuid.UUID] = None,
+) -> Resume:
+    """Persist a parsed resume to the database."""
+    resume = Resume(
+        user_id=user_id,
+        filename=filename,
+        file_size=file_size,
+        raw_text=raw_text,
+        parsed_data=parsed_data,
+    )
+    db.add(resume)
+    db.commit()
+    db.refresh(resume)
+    return resume
+
+
+def get_user_resumes(
+    db: Session,
+    user_id: uuid.UUID,
+    *,
+    limit: int = 20,
+) -> list[dict[str, Any]]:
+    """Get all resumes uploaded by a user, most recent first."""
+    stmt = (
+        select(Resume)
+        .where(Resume.user_id == user_id)
+        .order_by(Resume.uploaded_at.desc())
+        .limit(limit)
+    )
+    resumes = list(db.execute(stmt).scalars().all())
+    return [
+        {
+            "id": str(r.id),
+            "filename": r.filename,
+            "file_size": r.file_size,
+            "uploaded_at": r.uploaded_at.isoformat() if r.uploaded_at else None,
+            "parsed_data": r.parsed_data,
+        }
+        for r in resumes
+    ]
+
+
+def link_resume_to_application(
+    db: Session,
+    application_id: uuid.UUID,
+    resume_id: uuid.UUID,
+) -> None:
+    """Associate a resume with an application."""
+    db.execute(
+        update(Application)
+        .where(Application.id == application_id)
+        .values(resume_id=resume_id)
+    )
+    db.commit()
