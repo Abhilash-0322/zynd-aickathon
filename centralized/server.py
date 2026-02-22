@@ -98,10 +98,20 @@ async def lifespan(app: FastAPI):
         "equity": True,
     }
 
-    # Initialize database tables
-    log.info("Initializing PostgreSQL database…")
-    init_db()
-    log.info("Database ready.")
+    # Initialize database tables (retry up to 3× in case DB is slow to accept connections)
+    import time
+    for _attempt in range(3):
+        try:
+            log.info("Initializing PostgreSQL database… (attempt %d)", _attempt + 1)
+            init_db()
+            log.info("Database ready.")
+            break
+        except Exception as _db_err:
+            log.warning("DB init error (attempt %d): %s", _attempt + 1, _db_err)
+            if _attempt < 2:
+                time.sleep(5)
+            else:
+                log.error("Could not reach database after 3 attempts — continuing without DB.")
 
     asyncio.create_task(_broadcast_worker())
     log.info("Server ready.")

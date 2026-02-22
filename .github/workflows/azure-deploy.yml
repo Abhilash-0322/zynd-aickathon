@@ -1,0 +1,67 @@
+name: Build & Deploy to Azure App Service
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout ─────────────────────────────────────────────────────
+      - uses: actions/checkout@v4
+
+      # ── 2. Python 3.12 ──────────────────────────────────────────────────
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      # ── 3. Node.js + Next.js build ────────────────────────────────────────
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: web/package-lock.json
+
+      - name: Build Next.js static export
+        working-directory: ./web
+        env:
+          NEXT_PUBLIC_API_URL: ""
+        run: |
+          npm ci
+          npm run build
+
+      # ── 4. Create deployment package ─────────────────────────────────────
+      - name: Prepare deployment artifact
+        run: |
+          zip -r deploy.zip . \
+            --exclude "*.git*" \
+            --exclude ".venv/*" \
+            --exclude "web/node_modules/*" \
+            --exclude "web/.next/*" \
+            --exclude "web/src/*" \
+            --exclude "web/public/*" \
+            --exclude "web/*.ts" \
+            --exclude "web/*.mjs" \
+            --exclude "web/README.md" \
+            --exclude "**/__pycache__/*" \
+            --exclude "*.pyc" \
+            --exclude ".env" \
+            -q
+          echo "Artifact size: $(du -sh deploy.zip | cut -f1)"
+
+      # ── 5. Deploy to Azure App Service ────────────────────────────────────
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: zynd-hiring-app
+          slot-name: production
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: deploy.zip
