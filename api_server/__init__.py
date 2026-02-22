@@ -1,1 +1,1 @@
-# Fair Hiring Network API package
+# TalentInfra API package

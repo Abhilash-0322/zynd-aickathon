@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Zynd Protocol | Fair Hiring Network",
+  title: "TalentInfra | a fair hiring network powered by Zynd Protocol",
   description:
     "Human-first, bias-aware hiring operations powered by a multi-agent verification pipeline.",
   icons: { icon: "/favicon.ico" },

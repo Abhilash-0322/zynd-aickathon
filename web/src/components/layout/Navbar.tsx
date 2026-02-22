@@ -25,9 +25,9 @@ function Logo() {
         <span className="h-2.5 w-2.5 rounded-full bg-emerald-300 shadow-[0_0_18px_rgba(52,211,153,0.75)]" />
       </span>
       <span className="leading-tight">
-        <span className="block text-sm font-semibold text-white">Zynd Protocol</span>
+        <span className="block text-sm font-semibold text-white">TalentInfra</span>
         <span className="block text-[10px] uppercase tracking-[0.18em] text-slate-400">
-          Fair Hiring Network
+          a fair hiring network powered by Zynd Protocol
         </span>
       </span>
     </Link>

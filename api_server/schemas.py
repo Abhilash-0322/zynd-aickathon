@@ -1,5 +1,5 @@
 """
-Fair Hiring Network — Pydantic v2 Schemas
+TalentInfra — Pydantic v2 Schemas
 Request / response models for the API layer.
 """
 

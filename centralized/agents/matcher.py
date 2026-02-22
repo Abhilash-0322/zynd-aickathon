@@ -27,7 +27,7 @@ class CandidateMatcherAgent(BaseAgent):
         "domains":  ["hiring", "talent_matching", "fair_hiring"],
     }
     system_prompt = (
-        "You are a Candidate Matching Agent for a Fair Hiring Network.\n"
+        "You are a Candidate Matching Agent for TalentInfra — a fair hiring network powered by Zynd Protocol.\n"
         "Match purely on: skills, experience, demonstrated competencies.\n"
         "Ignore: name, gender, age, school prestige, location (unless required).\n\n"
         "Match thresholds: STRONG_MATCH≥80 GOOD_MATCH 65-79 "

@@ -1,7 +1,7 @@
-# 🌐 Fair Hiring Network
+# 🌐 TalentInfra
 ### Powered by Zynd Protocol | ZYND AICKATHON 2026
 
-> **Problem Statement:** Fair Hiring Network — Future of Work  
+> **TalentInfra** — a fair hiring network powered by Zynd Protocol  
 > Build agent networks that verify skills, detect bias, and ensure fair opportunities—creating transparency where talented developers are no longer overlooked by biased systems.
 
 ---

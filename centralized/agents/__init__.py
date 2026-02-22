@@ -1,7 +1,7 @@
 """
 centralized.agents package
 ===========================
-Six specialist agents for the Fair Hiring Network, each in its own module.
+Six specialist agents for TalentInfra, each in its own module.
 
   base        — BaseAgent, AgentMemory, StreamFn, shared constants
   privacy     — PrivacyGuardianAgent

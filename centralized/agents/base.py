@@ -1,5 +1,5 @@
 """
-Shared base classes and utilities for all centralized Fair Hiring Network agents.
+Shared base classes and utilities for all TalentInfra agents.
 """
 
 import os
@@ -117,7 +117,7 @@ class AgentMemory:
 # ─────────────────────────────────────────────────────────────────────────────
 class BaseAgent:
     """
-    Common base for all Fair Hiring Network agents.
+    Common base for all TalentInfra agents.
 
     Subclasses must define:
         name, role, port_key, description, capabilities, system_prompt
@@ -132,7 +132,7 @@ class BaseAgent:
     capabilities: dict = {}
 
     def __init__(self):
-        self.logger = logging.getLogger(f"FairHiring.{self.name}")
+        self.logger = logging.getLogger(f"TalentInfra.{self.name}")
         self.memory = AgentMemory(self.system_prompt)
         self.llm    = get_llm(self.model, temperature=0.1)
         self.zynd_agent: Optional[ZyndAIAgent] = None

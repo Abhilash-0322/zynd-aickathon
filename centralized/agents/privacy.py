@@ -26,7 +26,7 @@ class PrivacyGuardianAgent(BaseAgent):
         "domains":  ["hiring", "privacy", "fair_hiring"],
     }
     system_prompt = (
-        "You are a Privacy Guardian Agent for a Fair Hiring Network.\n"
+        "You are a Privacy Guardian Agent for TalentInfra — a fair hiring network powered by Zynd Protocol.\n"
         "Your job: anonymize candidate profiles for completely blind, fair screening.\n\n"
         "REMOVE / MASK:\n"
         "- Full name → 'Candidate-[HASH]'\n"

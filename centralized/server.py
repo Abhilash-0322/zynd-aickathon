@@ -1,5 +1,5 @@
 """
-Centralized Fair Hiring Network — FastAPI + WebSocket Server
+TalentInfra — FastAPI + WebSocket Server
 ============================================================
 Single process:
   - Instantiates all 6 agents at startup
@@ -51,7 +51,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(name)s] %(levelname)s %(message)s",
 )
-log = logging.getLogger("FairHiring.Server")
+log = logging.getLogger("TalentInfra.Server")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Global state
@@ -122,7 +122,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Fair Hiring Network — Centralized",
+    title="TalentInfra — a fair hiring network powered by Zynd Protocol",
     version="2.0.0",
     lifespan=lifespan,
 )
@@ -417,7 +417,7 @@ async def index():
         idx = os.path.join(_dir, "index.html")
         if os.path.isfile(idx):
             return FileResponse(idx)
-    return {"message": "Fair Hiring Network — Centralized API", "version": "2.0.0"}
+    return {"message": "TalentInfra — a fair hiring network powered by Zynd Protocol", "version": "2.0.0"}
 
 
 @app.get("/health")
@@ -874,7 +874,7 @@ if os.path.isdir(_NEXT_OUT_DIR):
 # ─────────────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     port = int(os.environ.get("CENTRAL_PORT", 8000))
-    log.info(f"Starting centralized Fair Hiring Network server on port {port}")
+    log.info(f"Starting TalentInfra server on port {port}")
     uvicorn.run(
         "centralized.server:app",
         host="0.0.0.0",

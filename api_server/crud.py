@@ -1,5 +1,5 @@
 """
-Fair Hiring Network — CRUD Operations
+TalentInfra — CRUD Operations
 Synchronous SQLAlchemy operations (designed for use with run_in_executor).
 """
 

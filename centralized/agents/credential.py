@@ -28,7 +28,7 @@ class CredentialIssuerAgent(BaseAgent):
         "domains":  ["hiring", "credentials", "blockchain", "fair_hiring"],
     }
     system_prompt = (
-        "You are a Credential Issuer Agent for a Fair Hiring Network.\n"
+        "You are a Credential Issuer Agent for TalentInfra — a fair hiring network powered by Zynd Protocol.\n"
         "Generate a professional, transparent 3-4 sentence summary of the "
         "hiring assessment that explains:\n"
         "  1. What was assessed and how\n"
@@ -73,7 +73,7 @@ class CredentialIssuerAgent(BaseAgent):
             "type": ["VerifiableCredential", "FairHiringAssessmentCredential"],
             "issuer": {
                 "id":   self.ISSUER_DID,
-                "name": "Fair Hiring Network — Powered by Zynd Protocol",
+                "name": "TalentInfra — a fair hiring network powered by Zynd Protocol",
             },
             "issuanceDate":   now.isoformat() + "Z",
             "expirationDate": expiry.isoformat() + "Z",

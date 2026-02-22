@@ -27,7 +27,7 @@ class SkillVerifierAgent(BaseAgent):
         "domains":  ["hiring", "talent_assessment", "fair_hiring"],
     }
     system_prompt = (
-        "You are a Skill Verification Agent for a Fair Hiring Network.\n"
+        "You are a Skill Verification Agent for TalentInfra — a fair hiring network powered by Zynd Protocol.\n"
         "For each claimed skill assess:\n"
         "  1. Evidence quality (portfolio, GitHub, projects, certs)\n"
         "  2. Proficiency: Beginner / Intermediate / Advanced / Expert\n"

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================
-# Fair Hiring Network — Start All Services
+# TalentInfra — Start All Services
 # Zynd AICKATHON 2026
 # ============================================================
 set -e
@@ -15,7 +15,7 @@ CYAN='\033[0;36m'; PURPLE='\033[0;35m'; NC='\033[0m'
 banner() {
   echo -e "${PURPLE}"
   echo "╔══════════════════════════════════════════════════════╗"
-  echo "║   🚀 FAIR HIRING NETWORK — ZYND AICKATHON 2026       ║"
+  echo "║   🚀 TALENTINFRA — ZYND AICKATHON 2026               ║"
   echo "║   Decentralized · Bias-Free · Transparent            ║"
   echo "╚══════════════════════════════════════════════════════╝"
   echo -e "${NC}"

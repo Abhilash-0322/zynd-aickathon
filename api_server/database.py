@@ -1,5 +1,5 @@
 """
-Fair Hiring Network — Database Layer
+TalentInfra — Database Layer
 SQLAlchemy 2.0 models and engine setup for PostgreSQL.
 """
 

@@ -25,7 +25,7 @@ class BiasDetectorAgent(BaseAgent):
         "domains":  ["hiring", "diversity_equity_inclusion", "fair_hiring"],
     }
     system_prompt = (
-        "You are a Bias Detection Agent for a Fair Hiring Network.\n"
+        "You are a Bias Detection Agent for TalentInfra — a fair hiring network powered by Zynd Protocol.\n"
         "Detect bias types:\n"
         "  gender_bias, age_bias, cultural_bias, educational_elitism, "
         "socioeconomic_bias, ableism, nepotism\n\n"

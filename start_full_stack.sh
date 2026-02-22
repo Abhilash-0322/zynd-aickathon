@@ -7,7 +7,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
 echo "╔══════════════════════════════════════════════════╗"
-echo "║    Zynd Protocol — Fair Hiring Network           ║"
+echo "║    TalentInfra — fair hiring powered by Zynd     ║"
 echo "║    Starting Full Stack...                        ║"
 echo "╚══════════════════════════════════════════════════╝"
 

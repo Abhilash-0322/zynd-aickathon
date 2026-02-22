@@ -1,0 +1,236 @@
+nohup: ignoring input
+INFO:     Started server process [61007]
+INFO:     Waiting for application startup.
+Loaded agent config from /home/abhilash/codespace/Zynd-hack/.agent-c-privacy/config.json
+Disabling x402, X402 payment config not provided
+ * Serving Flask app 'agent_did:polygonid:polygon:amoy:2qV4s19Dg7MLvdbGbbVfeTW2mTcWMx5XGarrFao8rw'
+ * Debug mode: off
+2026-02-22 06:20:09,240 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:6005
+ * Running on http://10.203.136.67:6005
+2026-02-22 06:20:09,240 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:41732 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41744 - "WebSocket /ws" [accepted]
+INFO:     connection open
+Agent webhook server started
+Listening on http://localhost:6005/webhook
+Updating webhook URL: {'agentId': '0f319a30-900b-42fa-a9fa-87279f0e9165', 'httpWebhookUrl': 'http://localhost:6005/webhook'}
+Synced webhook URL with the registry...
+
+============================================================
+  ZYND AI AGENT
+============================================================
+  Name        : Privacy Guardian
+  Description : Anonymizes candidate profiles for blind screening by removing PII — name, gender, age, photo, email — while preserving skills and achievements.
+  Agent ID    : did:polygonid:polygon:amoy:2qV4s19Dg7MLvdbGbbVfeTW2mTcWMx5XGarrFao8rw
+  DID         : did:polygonid:polygon:amoy:2qV4s19Dg7MLvdbGbbVfeTW2mTcWMx5XGarrFao8rw
+  Address     : 0x4CC1D7Dd6aB43Ef754FeA9A11D68452b36B982a6
+  Mode        : webhook
+  Webhook URL : http://localhost:6005/webhook
+  Price       : Free
+============================================================
+
+Loaded agent config from /home/abhilash/codespace/Zynd-hack/.agent-c-bias/config.json
+Disabling x402, X402 payment config not provided
+ * Serving Flask app 'agent_did:polygonid:polygon:amoy:2qaUzCGWbEq9EcC7y9zBHZn55ptx2WC2vv3QKviNFz'
+ * Debug mode: off
+2026-02-22 06:20:11,054 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:6003
+ * Running on http://10.203.136.67:6003
+2026-02-22 06:20:11,054 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+Agent webhook server started
+Listening on http://localhost:6003/webhook
+Updating webhook URL: {'agentId': 'f3a2d15b-6402-41e8-bc12-a2e3b0e2f067', 'httpWebhookUrl': 'http://localhost:6003/webhook'}
+Synced webhook URL with the registry...
+
+============================================================
+  ZYND AI AGENT
+============================================================
+  Name        : Bias Detector
+  Description : Detects and flags algorithmic, linguistic and structural biases in job descriptions and hiring criteria.
+  Agent ID    : did:polygonid:polygon:amoy:2qaUzCGWbEq9EcC7y9zBHZn55ptx2WC2vv3QKviNFz
+  DID         : did:polygonid:polygon:amoy:2qaUzCGWbEq9EcC7y9zBHZn55ptx2WC2vv3QKviNFz
+  Address     : 0x77E121BEAE7C5B49c8e474462C92A5692F6Bf510
+  Mode        : webhook
+  Webhook URL : http://localhost:6003/webhook
+  Price       : Free
+============================================================
+
+Loaded agent config from /home/abhilash/codespace/Zynd-hack/.agent-c-skill/config.json
+Disabling x402, X402 payment config not provided
+ * Serving Flask app 'agent_did:polygonid:polygon:amoy:2qWKTk5N6mghwZTUZ1XQyHUNEh9W9WN37mHYeRPFnK'
+ * Debug mode: off
+2026-02-22 06:20:12,758 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:6002
+ * Running on http://10.203.136.67:6002
+2026-02-22 06:20:12,758 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+INFO:     127.0.0.1:43014 - "GET /health HTTP/1.1" 200 OK
+Agent webhook server started
+Listening on http://localhost:6002/webhook
+Updating webhook URL: {'agentId': '3c64d6e6-1cae-408a-bbe5-9e32f426ee9e', 'httpWebhookUrl': 'http://localhost:6002/webhook'}
+Synced webhook URL with the registry...
+
+============================================================
+  ZYND AI AGENT
+============================================================
+  Name        : Skill Verifier
+  Description : Verifies candidate technical skills using portfolio analysis and evidence-based scoring with bias-free assessment.
+  Agent ID    : did:polygonid:polygon:amoy:2qWKTk5N6mghwZTUZ1XQyHUNEh9W9WN37mHYeRPFnK
+  DID         : did:polygonid:polygon:amoy:2qWKTk5N6mghwZTUZ1XQyHUNEh9W9WN37mHYeRPFnK
+  Address     : 0xDAB59a1f824aFfA1E3aF4DE1b9e2B7190c47BC96
+  Mode        : webhook
+  Webhook URL : http://localhost:6002/webhook
+  Price       : Free
+============================================================
+
+Loaded agent config from /home/abhilash/codespace/Zynd-hack/.agent-c-matcher/config.json
+Disabling x402, X402 payment config not provided
+ * Serving Flask app 'agent_did:polygonid:polygon:amoy:2qbBNbJJtGpDFHERDZHoRx9EKPDc5X38VmXwCDT5nV'
+ * Debug mode: off
+2026-02-22 06:20:14,463 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:6004
+ * Running on http://10.203.136.67:6004
+2026-02-22 06:20:14,463 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+INFO:     127.0.0.1:43014 - "GET /health HTTP/1.1" 200 OK
+Agent webhook server started
+Listening on http://localhost:6004/webhook
+Updating webhook URL: {'agentId': 'abd6b214-7c0a-4910-adf9-e433547824b5', 'httpWebhookUrl': 'http://localhost:6004/webhook'}
+Synced webhook URL with the registry...
+
+============================================================
+  ZYND AI AGENT
+============================================================
+  Name        : Candidate Matcher
+  Description : Objectively matches anonymized candidate skill profiles to job requirements using transparent scoring.
+  Agent ID    : did:polygonid:polygon:amoy:2qbBNbJJtGpDFHERDZHoRx9EKPDc5X38VmXwCDT5nV
+  DID         : did:polygonid:polygon:amoy:2qbBNbJJtGpDFHERDZHoRx9EKPDc5X38VmXwCDT5nV
+  Address     : 0xdD6BB314797F20A2d403084EFC23B546Ca0A674B
+  Mode        : webhook
+  Webhook URL : http://localhost:6004/webhook
+  Price       : Free
+============================================================
+
+Loaded agent config from /home/abhilash/codespace/Zynd-hack/.agent-c-credential/config.json
+Disabling x402, X402 payment config not provided
+ * Serving Flask app 'agent_did:polygonid:polygon:amoy:2qVmVG8k8QSX3i4cPft9ZvPYmAC3Xi5rSjobYq7zKe'
+ * Debug mode: off
+2026-02-22 06:20:16,169 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:6006
+ * Running on http://10.203.136.67:6006
+2026-02-22 06:20:16,170 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+Agent webhook server started
+Listening on http://localhost:6006/webhook
+Updating webhook URL: {'agentId': 'dba593ff-142b-40a5-8ca6-1f73050009d1', 'httpWebhookUrl': 'http://localhost:6006/webhook'}
+Synced webhook URL with the registry...
+
+============================================================
+  ZYND AI AGENT
+============================================================
+  Name        : Credential Issuer
+  Description : Issues W3C-standard Verifiable Credentials for verified candidate skills and creates transparent hiring audit trails.
+  Agent ID    : did:polygonid:polygon:amoy:2qVmVG8k8QSX3i4cPft9ZvPYmAC3Xi5rSjobYq7zKe
+  DID         : did:polygonid:polygon:amoy:2qVmVG8k8QSX3i4cPft9ZvPYmAC3Xi5rSjobYq7zKe
+  Address     : 0x9a5d4739d6edC9AC5eD82e4024a770f4fCFd1E90
+  Mode        : webhook
+  Webhook URL : http://localhost:6006/webhook
+  Price       : Free
+============================================================
+
+Loaded agent config from /home/abhilash/codespace/Zynd-hack/.agent-c-orchestrator/config.json
+Disabling x402, X402 payment config not provided
+ * Serving Flask app 'agent_did:polygonid:polygon:amoy:2qSrva3edeG8JFZtTfvCep8cktHZve8CYCLAoxa1TG'
+ * Debug mode: off
+2026-02-22 06:20:17,898 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:6001
+ * Running on http://10.203.136.67:6001
+2026-02-22 06:20:17,898 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+Agent webhook server started
+Listening on http://localhost:6001/webhook
+Updating webhook URL: {'agentId': 'e1937daf-dee5-4f35-8820-d47cbbd3b914', 'httpWebhookUrl': 'http://localhost:6001/webhook'}
+Synced webhook URL with the registry...
+
+============================================================
+  ZYND AI AGENT
+============================================================
+  Name        : Orchestrator
+  Description : Central orchestrator for the Fair Hiring Network. Coordinates the full multi-agent, bias-free candidate evaluation pipeline using Zynd Protocol.
+  Agent ID    : did:polygonid:polygon:amoy:2qSrva3edeG8JFZtTfvCep8cktHZve8CYCLAoxa1TG
+  DID         : did:polygonid:polygon:amoy:2qSrva3edeG8JFZtTfvCep8cktHZve8CYCLAoxa1TG
+  Address     : 0xEf5bB7E9a91f19C470ad84d6c25c3b2d68714146
+  Mode        : webhook
+  Webhook URL : http://localhost:6001/webhook
+  Price       : Free
+============================================================
+
+INFO:     127.0.0.1:36536 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36536 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38476 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38476 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38488 - "GET /api/jobs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38490 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38476 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38490 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38476 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38490 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38476 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38476 - "POST /api/apply HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34370 - "WebSocket /ws" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     127.0.0.1:38476 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34374 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34384 - "WebSocket /ws" [accepted]
+INFO:     connection closed
+INFO:     127.0.0.1:34394 - "WebSocket /ws" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:38476 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34374 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34374 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33844 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33844 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35448 - "GET /health HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     127.0.0.1:35454 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35466 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35454 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35466 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35476 - "WebSocket /ws" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     127.0.0.1:35454 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35466 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35454 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35466 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35466 - "POST /api/apply HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35482 - "WebSocket /ws" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     127.0.0.1:35466 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35454 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35488 - "WebSocket /ws" [accepted]
+INFO:     connection closed
+INFO:     127.0.0.1:35498 - "WebSocket /ws" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:35466 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35454 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56770 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46740 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46744 - "GET /api/jobs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45078 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45086 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57958 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60400 - "GET /health HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     connection closed
+INFO:     connection closed
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [61007]

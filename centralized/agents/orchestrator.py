@@ -1,7 +1,7 @@
 """
 Orchestrator Agent
 ==================
-Central coordinator for the Fair Hiring Network.
+Central coordinator for TalentInfra.
 Receives aggregated results from all 5 specialist agents and synthesizes
 a final, transparent, data-driven hiring recommendation using the large model.
 """
@@ -16,7 +16,7 @@ class OrchestratorAgent(BaseAgent):
     port_key = "orchestrator"
     model    = BIG_MODEL          # uses the larger model
     description = (
-        "Central orchestrator for the Fair Hiring Network. Coordinates the full "
+        "Central orchestrator for TalentInfra. Coordinates the full "
         "multi-agent, bias-free candidate evaluation pipeline using Zynd Protocol."
     )
     capabilities = {
@@ -26,7 +26,7 @@ class OrchestratorAgent(BaseAgent):
         "domains":  ["hiring", "orchestration", "fair_hiring", "multi_domain"],
     }
     system_prompt = (
-        "You are the Orchestrator Agent for the Fair Hiring Network — a decentralized, "
+        "You are the Orchestrator Agent for TalentInfra — a fair hiring network powered by Zynd Protocol, "
         "bias-free hiring platform powered by the Zynd Protocol.\n\n"
         "You receive multi-agent assessment results and synthesize a final, "
         "transparent, data-driven hiring decision.\n\n"

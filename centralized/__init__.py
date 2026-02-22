@@ -1,1 +1,1 @@
-# Centralized Fair Hiring Network — single-process version
+# TalentInfra — a fair hiring network powered by Zynd Protocol (single-process)

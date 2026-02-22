@@ -29,7 +29,7 @@ from centralized.agents import (
 #   centralized/agents/credential.py   — CredentialIssuerAgent
 #   centralized/agents/orchestrator.py — OrchestratorAgent
 
-log = logging.getLogger("FairHiring.Pipeline")
+log = logging.getLogger("TalentInfra.Pipeline")
 
 
 class PipelineRunner:

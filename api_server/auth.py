@@ -1,5 +1,5 @@
 """
-Fair Hiring Network — Authentication Routes
+TalentInfra — Authentication Routes
 JWT-free token-based auth using database sessions.
 """
 
